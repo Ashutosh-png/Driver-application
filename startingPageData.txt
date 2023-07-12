@@ -1,0 +1,44 @@
+import React, {useEffect} from "react";
+import { Text,navigation } from "react-native";
+
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+
+
+const invoice = () =>{
+    const navigation = useNavigation();
+    useEffect(() => {
+        navigation.setOptions({
+          headerShown: true,
+          title: "",
+          headerTitleStyle: {
+            fontSize: 20,
+            fontWeight: "bold",
+            color: "white",
+          },
+          headerStyle: {
+            backgroundColor: "#003580",
+            height: 110,
+            borderBottomColor: "transparent",
+            shadowColor: "transparent",
+          },
+          headerRight: () => (
+            <Ionicons
+              name="notifications-outline"
+              size={24}
+              color="white"
+              style={{ marginRight: 12 }}
+            />
+          ),
+        });
+      }, []);
+
+    
+    return(
+
+
+        <Text>Hello</Text>
+    );
+}
+
+export default invoice

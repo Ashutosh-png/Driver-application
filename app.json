@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "test_app",
+    "slug": "test_app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "config": {
+    "googleMapsApiKey": "AIzaSyDjIsbaqcr8co379nw6IKnPmAA0Hf5IyeI"
+  }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+         
+      },
+      "config": {
+    "googleMaps": {
+      "apiKey": "AIzaSyDjIsbaqcr8co379nw6IKnPmAA0Hf5IyeI"
+    }
+  }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
