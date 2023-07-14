@@ -1,24 +1,78 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import { FontAwesome } from "@expo/vector-icons"; // Import FontAwesome icons
+import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
+const Card = ({ data, distance1, fare1, triptype, time, pickup, drop, date, roundfare1 }) => {
+  const modelType = data.model_type
+  const navigation = useNavigation();
+  console.log("card date", date);
+  const startDate = date.startDate;
+  const endDate = date.endDate;
 
-const Card = ({ data, distance, fare ,triptype, time,pickup,drop, date}) => {
-    const navigation = useNavigation();
+  const [rounddata, setRoundData] = useState(null);
+  const [error, setError] = useState(null);
+  const [roundpackage, setRoundPackage] = useState(null); // Add fare state
 
-    let  updatedistance = distance;
+  let distance = null;
+  let fare = null;
+  let price = null;
 
-    if(triptype==='one way'){
-      console.log("it is one way");
-    }else if(triptype==='round'){
-      console.log('it is round');
-      updatedistance = updatedistance*2;
-console.log("distance ",updatedistance);
+  const calculatePrice = () => {
+    if (triptype === "one way") {
+      fare = fare1;
+      distance = distance1;
+      price = fare * parseInt(distance);
+    } else if (triptype === "round") {
+      if (rounddata) {
+        distance = rounddata.int;
+        fare = roundfare1;
+        price = fare * parseInt(distance);
+      }
     }
+  };
+
+  useEffect(() => {
+    fetch("https://aimcabbooking.com/roundtrip_api.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        trip: "",
+        bookid: "",
+        phone: "",
+        pickup,
+        drop,
+        date: startDate,
+        time,
+        distance: distance1,
+        dateend: endDate,
+        timeend: "12:00 PM",
+      }),
+    })
+      .then((response) => response.json())
+      .then((rounddata) => {
+        // Process the fetched data and set the fare state
+        console.log("round package data", rounddata);
+        setRoundPackage(rounddata);
+        setRoundData(rounddata);
+      })
+      .catch((error) => {
+        console.error("Error fetching fare:", error);
+        setError(error);
+      });
+  }, []);
+
+  calculatePrice();
+
+  console.log(price);
+
+  console.log("data  ",data);
 
   const handleBooking = () => {
     // Handle booking logic here
+        // Handle booking logic here
     console.log("Booking button clicked");
     console.log("distance" + distance);
     console.log("seats"+ data.seats);
@@ -27,14 +81,11 @@ console.log("distance ",updatedistance);
     const fl  = data.fuel_type
     console.log('trip ',triptype);
  // navigation.navigate("invoice", {seat: data.seats, fuel: data.fuel_type ,modelName: data.model_name, distance, fare, time,pickup,drop ,date,price: fare * parseInt(distance)});
-navigation.navigate("invoice", { st, fl, modelName: data.model_name, updatedistance, fare, time,triptype, pickup, drop, date, price: fare * parseInt(updatedistance),triptype });
-
+navigation.navigate("invoice", { startDate,endDate,st, fl,modelType, modelName: data.model_name, distance, fare, time,triptype, pickup, drop, date, price: fare * parseInt(distance),triptype });
   };
 
   const imageUrl =
-    "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,w_956,h_537/v1568134115/assets/6d/354919-18b0-45d0-a151-501ab4c4b114/original/XL.png"; // Replace with your image URL
-
-  // dataService.js
+    "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,w_956,h_537/v1568134115/assets/6d/354919-18b0-45d0-a151-501ab4c4b114/original/XL.png";
 
   return (
     <View style={styles.card}>
@@ -53,14 +104,9 @@ navigation.navigate("invoice", { st, fl, modelName: data.model_name, updatedista
             Fuel:
             <Text style={styles.value}> {data.fuel_type}</Text>
           </Text>
-
-          {/* <Text style={styles.shortDescription}>
-            distance:                                             //Distance 
-            <Text style={styles.value}> {distance}</Text>
-          </Text> */}
           <Text style={styles.shortDescription}>
-            price:
-             <Text style={styles.value}>{fare * parseInt(updatedistance)}</Text> 
+            Price:
+            <Text style={styles.value}>{price}</Text>
           </Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={handleBooking}>
@@ -136,6 +182,5 @@ const styles = {
     fontWeight: "bold",
   },
 };
-
 
 export default Card;

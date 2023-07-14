@@ -10,6 +10,8 @@ const Regular = ({ formData }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [fare, setFare] = useState(null); // Add fare state
+      const [roundfare, setroundFare] = useState(null); // Add fare state
+
 
    const parsedFormData = JSON.parse(JSON.stringify(formData));
   const tripType = parsedFormData.tripType;
@@ -64,6 +66,18 @@ const Regular = ({ formData }) => {
       .catch((error) => {
         console.error("Error fetching fare:", error);
       });
+       fetch(
+      `https://aimcabbooking.com/admin/fetch_twoway_price.php?table=round_trip&source_city=${pickupCity}&destination_city=${dropCity}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        // Process the fetched data and set the fare state
+        console.log("round data ",data);
+        setroundFare(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching fare:", error);
+      });
   }, []);
 
   let farePrice = null; // Declare a variable to store the fare price
@@ -72,6 +86,13 @@ const Regular = ({ formData }) => {
     // Check if the fare state is available
     const fareObject = fare[0]; // Assuming the fare data is an array with a single object
     farePrice = fareObject.sedan; // Store the fare price in the variable
+  }
+   let roundfarePrice = null; // Declare a variable to store the fare price
+
+  if (roundfare) {
+    // Check if the fare state is available
+    const roundfareObject = roundfare[0]; // Assuming the fare data is an array with a single object
+    roundfarePrice = roundfareObject.sedan; // Store the fare price in the variable
   }
 
   const scrollY = new Animated.Value(0);
@@ -103,13 +124,14 @@ const Regular = ({ formData }) => {
               <Card
                 key={item.id}
                 data={item}
-                distance={formData.distance}
+                distance1={formData.distance}
                 time={formData.selectedTime}
                 pickup={formData.pickupLocation}
                 drop={formData.dropLocation}
                 date={formData.selectedDates}
-                fare={farePrice}
-                                triptype={tripType}
+                fare1={farePrice}
+                roundfare1={roundfarePrice}
+                triptype={tripType}
 
               />
             ))}

@@ -13,8 +13,6 @@ const Payment = ({ route }) => {
   const [congratulationAnimation] = useState(new Animated.Value(0));
   const [processingAnimation] = useState(new Animated.Value(0));
 
-  console.log("Payment: "+JSON.stringify(InvoiceData));
-  console.log("data      ",InvoiceData);
   useEffect(() => {
     navigation.setOptions({
       headerShown: true,
@@ -23,7 +21,7 @@ const Payment = ({ route }) => {
         fontSize: 20,
         fontWeight: 'bold',
         color: 'white',
-        fontFamily: ' ',
+        fontFamily: '',
       },
       headerStyle: {
         backgroundColor: '#003580',
@@ -32,14 +30,9 @@ const Payment = ({ route }) => {
         shadowColor: 'transparent',
       },
       headerRight: () => (
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity>
-            <Ionicons
-              name="notifications-outline"
-              size={24}
-              color="white"
-              style={{ marginRight: 12 }}
-            />
+            <Ionicons name="notifications-outline" size={24} color="white" style={{ marginRight: 12 }} />
           </TouchableOpacity>
           <TouchableOpacity>
             <AntDesign name="user" size={24} color="white" />
@@ -47,7 +40,7 @@ const Payment = ({ route }) => {
         </View>
       ),
     });
-  }, []); 
+  }, []);
 
   useEffect(() => {
     if (showConfirmation) {
@@ -80,10 +73,78 @@ const Payment = ({ route }) => {
     }
   }, [paymentMode, congratulationAnimation, processingAnimation]);
 
-  const handlePaymentMode = (mode) => {
+  const handlePaymentMode = async (mode) => {
     if (mode === 'Cash') {
-      setPaymentMode(mode);
-      setShowConfirmation(true);
+      // Create a payload object with the required invoice data
+      const payload = {
+        name: InvoiceData.name,
+        phone: InvoiceData.phone,
+        email: InvoiceData.email,
+        car: InvoiceData.car,
+        distance: InvoiceData.distance,
+        user_pickup: InvoiceData.user_pickup,
+        user_drop: InvoiceData.user_drop,
+        date1: InvoiceData.date1,
+        dateend: InvoiceData.dateend,
+        time: InvoiceData.time,
+        user_trip_type: InvoiceData.user_trip_type,
+        userid: InvoiceData.userid,
+        driver_bhata: InvoiceData.driver_bhata,
+        gst: InvoiceData.gst,
+        service_charge: InvoiceData.service_charge,
+        baseAmount: InvoiceData.baseAmount,
+        amount: InvoiceData.amount,
+        days: InvoiceData.days,
+      };
+
+      try {
+        // Send a POST request to the URL with the payload data
+        const response = await fetch('https://aimcabbooking.com/confirm-round-api.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+
+        // Check the response status
+        if (response.ok) {
+          setPaymentMode(mode);
+          setShowConfirmation(true);
+          // Show success message and redirect the user
+          Alert.alert(
+            'Payment Success',
+            'Your payment was successful.',
+            [
+              {
+                text: 'OK',
+                onPress: () => {
+                  setShowConfirmation(false);
+                  navigation.navigate('Home');
+                },
+              },
+            ]
+          );
+        } else {
+          // Show error message if the response status is not OK
+          Alert.alert(
+            'Payment Error',
+            'There was an error processing your payment. Please try again later.',
+            [
+              { text: 'OK', style: 'cancel' },
+            ]
+          );
+        }
+      } catch (error) {
+        // Show error message if an exception occurs during the request
+        Alert.alert(
+          'Payment Error',
+          'There was an error processing your payment. Please try again later.',
+          [
+            { text: 'OK', style: 'cancel' },
+          ]
+        );
+      }
     } else if (mode === 'Online') {
       // Show error message with animation
       Alert.alert(
@@ -97,8 +158,6 @@ const Payment = ({ route }) => {
       setPaymentMode(mode);
     }
   };
-  
-  
 
   const congratsOpacity = congratulationAnimation.interpolate({
     inputRange: [0, 0.5, 1],
@@ -135,8 +194,7 @@ const Payment = ({ route }) => {
           <Text style={styles.confirmationText}>
             Our team will reach out to confirm your booking shortly.
           </Text>
-          <Animated.View
-            style={[styles.processingAnimation, { opacity: processingOpacity }]}>
+          <Animated.View style={[styles.processingAnimation, { opacity: processingOpacity }]}>
             <Text style={styles.processingText}>Processing...</Text>
           </Animated.View>
         </Animated.View>
@@ -150,12 +208,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#fff', // Update the background color to your desired color
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 20,
-    fontFamily: ' ',
+    fontFamily: '',
+    color: '#003580', // Update the text color to your desired color
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -164,14 +224,14 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   activeButton: {
-    backgroundColor: '#003580',
+    backgroundColor: '#003580', // Update the active button background color to your desired color
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
   inactiveButton: {
-    backgroundColor: '#ccc',
+    backgroundColor: '#ccc', // Update the inactive button background color to your desired color
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
@@ -194,12 +254,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 10,
-    fontFamily: ' ',
+    fontFamily: '',
+    color: '#003580', // Update the text color to your desired color
   },
   confirmationText: {
     fontSize: 18,
     textAlign: 'center',
-    fontFamily: ' ',
+    fontFamily: '',
+    color: '#003580', // Update the text color to your desired color
   },
   processingAnimation: {
     marginTop: 20,
@@ -208,7 +270,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
-    fontFamily: ' ',
+    fontFamily: '',
+    color: '#003580', // Update the text color to your desired color
   },
 });
 

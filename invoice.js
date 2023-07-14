@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import moment from 'moment';
 
 const Invoice = ({ route }) => {
   const navigation = useNavigation();
@@ -13,10 +14,16 @@ const Invoice = ({ route }) => {
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  console.log("trip "+st);
+    const [userid, setUserid] = useState("");
+        const [email, setemail] = useState("");
 
-  const { modelName, updatedistance, fare, pickup, drop, price, date, time, st, fl,triptype } = route.params;
-  const distance = updatedistance;
+
+  
+
+  const { modelName, distance, fare, pickup, drop, price, date, time, st, fl, triptype,startDate,endDate , modelType} = route.params;
+  
+console.log("model  ",JSON.stringify(modelType));
+  
 
   useEffect(() => {
     navigation.setOptions({
@@ -60,24 +67,28 @@ const Invoice = ({ route }) => {
   useEffect(() => {
     fetchData();
   }, []);
+
   const fetchData = async () => {
     try {
       const fetchedData = await AsyncStorage.getItem("userData");
       if (fetchedData !== null) {
         const user = JSON.parse(fetchedData);
-        console.log("UserData in Invoice: " + JSON.stringify(user));
+        console.log("Invoice: " + JSON.stringify(user));
         setUserData(user);
         setName(user.name);
         setAge(user.age + "");
         setGender(user.gender);
         setPhoneNumber(user.phone);
-
-
+        setUserid(user.userid);
+        setemail(user.email);
       }
     } catch (error) {
       console.error("Error retrieving user data:", error);
     }
   };
+
+  console.log("userid  ",userid);
+    console.log("user email  ",email);
 
 
   const getButtonColor = (buttonGender) => {
@@ -87,33 +98,102 @@ const Invoice = ({ route }) => {
     return "#ccc"; // Inactive button color
   };
 
-
-
   const handleFormSubmit = () => {
-    // Create an object with the form data and other parameters
+        let date1 = date.currentDate;
+    if(triptype==="round"){
+       date1 = startDate;
+    }
+
+    console.log("date  ",date1);
+
+
+       //age , gender , fare
+
     const InvoiceData = {
       name,
-      age,
-      gender,
-      phoneNumber,
-      modelName,
+      phone:phoneNumber,
+      email,
+      car:modelName,
       distance,
-      fare,
-      pickup,
-      drop,
-      price,
-      date,
+      user_pickup:pickup,
+      user_drop: drop,
+      date1 ,
+      dateend:endDate,
       time,
       st,
       fl,
-      triptype
+      user_trip_type:triptype,
+      userid,
+      driver_bhata: driverRate,
+      gst,
+      service_charge:serviceCharges,
+      baseAmount: price,
+      amount: totalAmount,
+      days:daysDiff
     };
-  
-    // Handle form submission logic here
-    // Send the data to the Payment component using navigation
+
     navigation.navigate("Payment", { InvoiceData });
   };
-  
+
+  const [serviceCharges, setServiceCharges] = useState(0);
+  const [gst, setGst] = useState(0);
+  const [totalAmount, setTotalAmount] = useState(price);
+
+  useEffect(() => {
+    const calculatedServiceCharges = Math.floor((price )/ 100) * 10;
+    setServiceCharges(calculatedServiceCharges);
+
+    const calculatedGst = Math.floor((price) / 100) * 5;
+    setGst(calculatedGst);
+    console.log("gst ",calculatedGst);
+
+
+
+    const calculatedTotalAmount = price + calculatedServiceCharges + calculatedGst;
+    setTotalAmount(calculatedTotalAmount);
+  }, []);
+
+
+  if(triptype==="round"){
+     useEffect(() => {
+    const calculatedServiceCharges = Math.floor((price+driverRate )/ 100) * 10;
+    setServiceCharges(calculatedServiceCharges);
+
+    const calculatedGst = Math.floor((price+driverRate) / 100) * 5;
+    setGst(calculatedGst);
+    console.log("gst ",calculatedGst);
+
+
+
+    const calculatedTotalAmount = price + calculatedServiceCharges + calculatedGst+driverRate;
+    setTotalAmount(calculatedTotalAmount);
+  }, []);
+
+  }
+
+ const start = moment(startDate, 'YYYY/MM/DD');
+const end = moment(endDate, 'YYYY/MM/DD');
+const daysDiff = end.diff(start, 'days') + 1; // Adding 1 to include both start and end dates
+
+console.log("daydifference...........: ", daysDiff);
+console.log("startDate: ", startDate);
+console.log("endDate: ", endDate);
+  console.log(startDate);
+    console.log(endDate);
+
+
+
+  // Calculate the driver rate based on the number of days
+  let driverRate = 0; // Base driver rate per day
+  driverRate += daysDiff * 300; // Increase rate by 100 per day
+
+  console.log("driver rate ",driverRate);
+  console.log(parseInt(("rate ",fare * distance) ))
+  console.log(fare);
+  console.log(distance);
+
+ // const serviceCharges = fare * distance * 0.1; // 10% of the fare * distance
+ // console.log("service charge",serviceCharges);
 
 
 
@@ -147,6 +227,10 @@ const Invoice = ({ route }) => {
         <View style={styles.row}>
           <Text style={styles.label}>Trip Type:</Text>
           <Text>{triptype}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Distance:</Text>
+          <Text>{parseInt(distance)} km</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>Price:</Text>
@@ -211,16 +295,22 @@ const Invoice = ({ route }) => {
           <Text>{fare} /km</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>Distance:</Text>
-          <Text>{parseInt(updatedistance)} km</Text>
-        </View>
-        <View style={styles.row}>
           <Text style={styles.label}>Service charges:</Text>
-          <Text>{"₹ " + parseInt((fare * updatedistance) % 10)}</Text>
+          <Text>{"₹ " + serviceCharges}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>Total:</Text>
-          <Text>{"₹ " + parseInt(price + ((fare * updatedistance) % 10))}</Text>
+          <Text style={styles.label}>GST(5%)</Text>
+          <Text>{"₹ " + gst}</Text>
+        </View>
+         {triptype === "round" && (
+          <View style={styles.row}>
+            <Text style={styles.label}>Driver rate:</Text>
+            <Text>{"₹ " + driverRate}</Text>
+          </View>
+        )}
+        <View style={styles.row}>
+          <Text style={styles.label}>Total Amount:</Text>
+          <Text style={styles.highlightedAmount}>{"₹ " + totalAmount}</Text>
         </View>
         <View style={styles.submitButtonContainer}>
           <Button title="Book now" onPress={handleFormSubmit} color="#003580" />
@@ -346,6 +436,11 @@ const styles = StyleSheet.create({
   paymentTitle: {
     fontWeight: "bold",
     marginBottom: 5,
+  },
+  highlightedAmount: {
+    fontSize:18,
+    fontWeight: "bold",
+    color: "green",
   },
 });
 
