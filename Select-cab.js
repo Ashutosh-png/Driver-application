@@ -7,6 +7,8 @@ import { TouchableOpacity } from "react-native";
 import Card from "./Components/Card";
 import PremiumCab from "./PremiumCab";
 import LuxuryCab from "./LuxuryCab";
+import SedanPremium from "./SedanPremium";
+import MUV from "./MUV";
 
 // Import other components/screens if needed
 import BookPage from "./BookPage";
@@ -52,7 +54,7 @@ const SelectCab = ({ route }) => {
       <Tab.Screen
         name="Premium"
         options={{
-          tabBarLabel: "Premium",
+          tabBarLabel: "Sedan",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="car" size={size} color={color} />
           ),
@@ -61,15 +63,38 @@ const SelectCab = ({ route }) => {
         {() => <PremiumCab formData={formData} />}
       </Tab.Screen>
       <Tab.Screen
+        name="Luxurys"
+        options={{
+          tabBarLabel: "Premium",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="car" size={size} color={color} />
+          ),
+        }}
+      >
+        {() => <SedanPremium formData={formData} />}
+      </Tab.Screen>
+      <Tab.Screen
         name="Luxury"
         options={{
-          tabBarLabel: "Luxury",
+          tabBarLabel: "SUV",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="car" size={size} color={color} />
           ),
         }}
       >
         {() => <LuxuryCab formData={formData} />}
+      </Tab.Screen>
+       
+       <Tab.Screen
+        name="Luxuryss"
+        options={{
+          tabBarLabel: "MUV",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="car" size={size} color={color} />
+          ),
+        }}
+      >
+        {() => <MUV formData={formData} />}
       </Tab.Screen>
     </Tab.Navigator>
   );

@@ -1,19 +1,9 @@
-import React, { useState } from "react";
-import {
-  View,
-  Image,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  Alert
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Image, StyleSheet, TextInput, TouchableOpacity, Text, Alert, ActivityIndicator } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from "@expo/vector-icons";
-
-
 
 const Loginpage = () => {
   const navigation = useNavigation();
@@ -21,9 +11,15 @@ const Loginpage = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showSkipButton, setShowSkipButton] = useState(false);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSkipButton(true);
+    }, 3000);
 
-
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleLogin = () => {
     // Create a JSON object with username and password
@@ -42,33 +38,23 @@ const Loginpage = () => {
     })
       .then(response => response.json())
       .then(async result => {
-        // console.log(result);
         if (result.success == true) {
           // Login successful
 
-          // Alert.alert('Success', result.message);
-
-          // Save the user data to AsyncStorage
           try {
             await AsyncStorage.setItem('userData', JSON.stringify(result.user));
-            // console.log("hii");
           } catch (error) {
             console.error('Error saving user data:', error);
           }
 
           navigation.navigate("Home");
-          // You can handle the successful login here, e.g., navigate to a new screen
         } else {
           // Login error
           Alert.alert('Error', result.message);
-
-
-          // You can handle the login error here, e.g., display an error message
         }
       })
       .catch(error => {
         console.error('Error:', error);
-        // Handle any error that occurs during the API call
       });
   };
 
@@ -101,25 +87,24 @@ const Loginpage = () => {
             onChangeText={(text) => setUsername(text)}
           />
 
-<TextInput
-  style={[styles.input, { width: "100%" }]}
-  placeholder="password"
-  placeholderTextColor="white"
-  value={password}
-  onChangeText={setPassword}
-  secureTextEntry={!showPassword}
-/>
-<TouchableOpacity
-  style={styles.passwordToggle}
-  onPress={() => setShowPassword(!showPassword)}
->
-  <Ionicons
-    name={showPassword ? "eye-off" : "eye"}
-    size={24}
-    color="white"
-  />
-</TouchableOpacity>
-
+          <TextInput
+            style={[styles.input, { width: "100%" }]}
+            placeholder="password"
+            placeholderTextColor="white"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showPassword}
+          />
+          <TouchableOpacity
+            style={styles.passwordToggle}
+            onPress={() => setShowPassword(!showPassword)}
+          >
+            <Ionicons
+              name={showPassword ? "eye-off" : "eye"}
+              size={24}
+              color="white"
+            />
+          </TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.loginButton, { width: "100%" }]}
@@ -135,15 +120,20 @@ const Loginpage = () => {
             <Text style={styles.createAccountButtonText}>Create Account</Text>
           </TouchableOpacity>
 
-
           {errorMessage ? (
             <Text style={styles.error}>{errorMessage}</Text>
           ) : null}
         </View>
 
-        <TouchableOpacity style={styles.skipButton} onPress={handleSkipTest}>
-          <Text style={styles.skipButtonText}>Skip</Text>
-        </TouchableOpacity>
+        {showSkipButton ? (
+          <TouchableOpacity style={styles.skipButton} onPress={handleSkipTest}>
+            <Text style={styles.skipButtonText}>Skip</Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator color="#FFF" size="small" />
+          </View>
+        )}
       </View>
     </View>
   );
@@ -205,7 +195,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
-
   createAccountButtonText: {
     color: "white",
     fontSize: 16,
@@ -217,14 +206,28 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   skipButton: {
-    marginTop: 10,
-    bottom: "90%",
-    left: "45%",
+    position: "absolute",
+    top: 60,
+    right: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: "#FFBF00",
+    borderRadius: 20,
   },
   skipButtonText: {
-    color: "white",
+    color: "#5A5A5A",
     fontSize: 16,
     fontWeight: "bold",
+    textAlign: "center",
+  },
+  loadingContainer: {
+    position: "absolute",
+    top: 60,
+    right: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 });
 

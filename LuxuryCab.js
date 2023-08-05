@@ -10,7 +10,9 @@ const Regular = ({ formData }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [fare, setFare] = useState(null); // Add fare state
-      const [roundfare, setroundFare] = useState(null); // Add fare state
+    const [roundfare, setroundFare] = useState(null); // Add fare state
+     const [pickuppin, setpickuppin] = useState(null); // Add fare state
+    const [droppin, setdroppin] = useState(null); // Add fare state
 
 
    const parsedFormData = JSON.parse(JSON.stringify(formData));
@@ -43,7 +45,7 @@ const Regular = ({ formData }) => {
     });
   }, []);
 
-  useEffect(() => {
+ useEffect(() => {
     fetch("https://aimcabbooking.com/admin/fetch_data.php?table=cabinfo")
       .then((response) => response.json())
       .then((responseData) => {
@@ -53,32 +55,124 @@ const Regular = ({ formData }) => {
         console.error("Error fetching data:", error);
       });
     const pickupCity = formData.pickupLocation.split(",")[0].trim();
-    const dropCity = formData.dropLocation.split(",")[0].trim();
-    fetch(
-      `https://aimcabbooking.com/admin/fetch_oneway_price.php?table=oneway_trip&source_city=${pickupCity}&destination_city=${dropCity}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        // Process the fetched data and set the fare state
-        console.log(data);
-        setFare(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching fare:", error);
-      });
-       fetch(
-      `https://aimcabbooking.com/admin/fetch_twoway_price.php?table=round_trip&source_city=${pickupCity}&destination_city=${dropCity}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        // Process the fetched data and set the fare state
-        console.log("round data ",data);
-        setroundFare(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching fare:", error);
-      });
+   const dropCity = formData.dropLocation.split(",")[0].trim();
+
+// Assuming pickupCity and dropCity are variables containing the city names
+
+const requestDatapickup = {
+ city: pickupCity,
+};
+
+fetch('https://aimcabbooking.com/get_pincode_api.php', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(requestDatapickup),
+})
+  .then((response) => response.json())
+  .then((data) => {
+    // Process the fetched data and set the fare state
+    console.log("single trip.........//////////////////// ", data.pincode);
+    setpickuppin(data.pincode);
+      console.log(pickuppin);
+
+  })
+  .catch((error) => {
+    console.error("Error fetching fare:", error);
+  });
+
+  console.log(pickuppin);
+
+  const requestDatadrop = {
+ city: dropCity,
+};
+
+fetch('https://aimcabbooking.com/get_pincode_api.php', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(requestDatadrop),
+})
+  .then((response) => response.json())
+  .then((data) => {
+    // Process the fetched data and set the fare state
+    console.log("drop trip.........//////////////////// ", data.pincode);
+    setdroppin(data.pincode);
+      console.log(droppin);
+
+  })
+  .catch((error) => {
+    console.error("Error fetching fare:", error);
+  });
+
+    
+     //  const pickupCity = formData.pickupLocation;
+  //  const dropCity = formData.dropLocation;
+    // fetch(
+    //   `https://aimcabbooking.com/fetch_oneway_price.php?table=oneway_trip&source_city=${pickupCity}&destination_city=${dropCity}&source_pincode=${pickuppin}&destination_pincode=${droppin}`
+    // )
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     // Process the fetched data and set the fare state
+    //     console.log("single trip ",data);
+    //     setFare(data);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching fare:", error);
+    //   });
+    //    fetch(
+    //   `https://aimcabbooking.com/admin/fetch_twoway_price.php?table=round_trip&source_city=${pickupCity}&destination_city=${dropCity}&source_pincode=${pickuppin}&destination_pincode=${droppin}`
+    // )
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     // Process the fetched data and set the fare state
+    //     console.log("round data ",data);
+    //     setroundFare(data);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching fare:", error);
+    //   });
   }, []);
+
+
+  useEffect(() => {
+    // You need to put the fetch calls that depend on pickuppin and droppin inside this useEffect
+    // because the states pickuppin and droppin are not immediately available when the component mounts
+
+    // Check if both pickuppin and droppin are available before making the fetch calls
+    if (pickuppin && droppin) {
+      const pickupCity = formData.pickupLocation.split(",")[0].trim();
+      const dropCity = formData.dropLocation.split(",")[0].trim();
+
+      fetch(
+        `https://aimcabbooking.com/fetch_oneway_price.php?table=oneway_trip&source_city=${pickupCity}&destination_city=${dropCity}&source_pincode=${pickuppin}&destination_pincode=${droppin}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          // Process the fetched data and set the fare state
+          console.log("single trip ", data);
+          setFare(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching fare:", error);
+        });
+
+      fetch(
+        `https://aimcabbooking.com/fetch_twoway_price.php?table=round_trip&source_city=${pickupCity}&destination_city=${dropCity}&source_pincode=${pickuppin}&destination_pincode=${droppin}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          // Process the fetched data and set the fare state
+          console.log("round data ", data);
+          setroundFare(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching fare:", error);
+        });
+    }
+  }, [pickuppin, droppin]);
 
   let farePrice = null; // Declare a variable to store the fare price
 
@@ -93,6 +187,22 @@ const Regular = ({ formData }) => {
     // Check if the fare state is available
     const roundfareObject = roundfare[0]; // Assuming the fare data is an array with a single object
     roundfarePrice = roundfareObject.suv; // Store the fare price in the variable
+  }
+
+
+  let farePrice2 = null; // Declare a variable to store the fare price
+
+  if (fare) {
+    // Check if the fare state is available
+    const fareObject = fare[0]; // Assuming the fare data is an array with a single object
+    farePrice2 = fareObject.suvplus; // Store the fare price in the variable
+  }
+   let roundfarePrice2 = null; // Declare a variable to store the fare price
+
+  if (roundfare) {
+    // Check if the fare state is available
+    const roundfareObject = roundfare[0]; // Assuming the fare data is an array with a single object
+    roundfarePrice2 = roundfareObject.suvplus; // Store the fare price in the variable
   }
 
   const scrollY = new Animated.Value(0);
@@ -119,7 +229,7 @@ const Regular = ({ formData }) => {
       >
         <View style={styles.cardsContainer}>
           {data
-             .filter((item) => item.model_type === "SUV" || item.model_type === "MUV")
+             .filter((item) => item.model_type === "SUV" )
             .map((item) => (
               <Card
                 key={item.id}
@@ -131,6 +241,26 @@ const Regular = ({ formData }) => {
                 date={formData.selectedDates}
                 fare1={farePrice}
                 roundfare1={roundfarePrice}
+                triptype={tripType}
+
+              />
+            ))}
+        </View>
+
+         <View style={styles.cardsContainer1}>
+          {data
+             .filter((item) =>  item.model_type === "MUV")
+            .map((item) => (
+              <Card
+                key={item.id}
+                data={item}
+                distance1={formData.distance}
+                time={formData.selectedTime}
+                pickup={formData.pickupLocation}
+                drop={formData.dropLocation}
+                date={formData.selectedDates}
+                fare1={farePrice2}
+                roundfare1={roundfarePrice2}
                 triptype={tripType}
 
               />
@@ -178,6 +308,10 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   cardsContainer: {
+    padding: 10,
+    marginBottom: -10, // Adjust the marginBottom to leave space for the bottom navigation
+  },
+   cardsContainer1: {
     padding: 10,
     marginBottom: 100, // Adjust the marginBottom to leave space for the bottom navigation
   },

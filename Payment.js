@@ -4,6 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/FontAwesome'; // Assuming FontAwesome contains the correct icon
+
 
 const Payment = ({ route }) => {
   const navigation = useNavigation();
@@ -96,7 +98,7 @@ const Payment = ({ route }) => {
         amount: InvoiceData.amount,
         days: InvoiceData.days,
       };
-
+console.log("d...........",InvoiceData.distance);
       try {
         // Send a POST request to the URL with the payload data
         const response = await fetch('https://aimcabbooking.com/confirm-round-api.php', {
@@ -108,23 +110,20 @@ const Payment = ({ route }) => {
         });
 
         // Check the response status
-        if (response.ok) {
-          setPaymentMode(mode);
-          setShowConfirmation(true);
-          // Show success message and redirect the user
-          Alert.alert(
-            'Payment Success',
-            'Your payment was successful.',
-            [
-              {
-                text: 'OK',
-                onPress: () => {
-                  setShowConfirmation(false);
-                  navigation.navigate('Home');
-                },
-              },
-            ]
-          );
+          if (response.ok) {
+        setPaymentMode(mode);
+        setShowConfirmation(true);
+        // Start the congratulation animation
+        Animated.timing(congratulationAnimation, {
+          toValue: 1,
+          duration: 1000,
+          easing: Easing.ease,
+          useNativeDriver: true,
+        }).start(() => {
+          // After animation completes, redirect the user to the home screen
+          setShowConfirmation(false);
+          navigation.navigate('Home');
+        });
         } else {
           // Show error message if the response status is not OK
           Alert.alert(
@@ -187,17 +186,18 @@ const Payment = ({ route }) => {
         </TouchableOpacity>
       </View>
       {showConfirmation && (
-        <Animated.View style={[styles.confirmationMessage, { opacity: congratsOpacity }]}>
-          <Text style={styles.congratulationText}>
-            Congratulation! Your booking has been successful.
-          </Text>
-          <Text style={styles.confirmationText}>
-            Our team will reach out to confirm your booking shortly.
-          </Text>
-          <Animated.View style={[styles.processingAnimation, { opacity: processingOpacity }]}>
-            <Text style={styles.processingText}>Processing...</Text>
-          </Animated.View>
-        </Animated.View>
+       <Animated.View style={[styles.confirmationMessage, { opacity: congratsOpacity }]}>
+      <Icon name="check-circle" size={30} color="green" /> 
+      <Text style={styles.congratulationText}>
+        Congratulation! Your booking has been successful.
+      </Text>
+      <Text style={styles.confirmationText}>
+        Our team will reach out to confirm your booking shortly.
+      </Text>
+      <Animated.View style={[styles.processingAnimation, { opacity: processingOpacity }]}>
+        <Text style={styles.processingText}>Processing...</Text>
+      </Animated.View>
+    </Animated.View>
       )}
     </View>
   );

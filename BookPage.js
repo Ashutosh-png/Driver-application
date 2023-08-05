@@ -21,6 +21,9 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 const GOOGLE_PLACES_API_KEY = "AIzaSyCelDo4I5cPQ72TfCTQW-arhPZ7ALNcp8w";
 const BACKEND_API_URL = "YOUR_BACKEND_API_URL";
 
+
+
+
 const App = () => {
   const navigation = useNavigation();
 
@@ -131,6 +134,10 @@ const App = () => {
       // Set the distance in the state
       setDistance(distanceInKilometers);
 
+
+     
+
+    //console.log(pickupPincode)
       // Prepare the data object with form information and distance
       const formData = {
         pickupLocation,
@@ -139,6 +146,7 @@ const App = () => {
         tripType,
         selectedDates,
         selectedTime,
+       
       };
       console.log("BookPage ", formData);
 
@@ -405,7 +413,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#2a52be",
   },
   searchButtonText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
     color: "#FFF",
   },
@@ -414,7 +422,8 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 4,
     backgroundColor: "#2a52be",
-    marginTop: 10,
+    marginTop: '-60%',
+    paddingHorizontal: '40%',
   },
   customButtonText: {
     fontSize: 16,

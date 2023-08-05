@@ -105,6 +105,8 @@ console.log("model  ",JSON.stringify(modelType));
     }
 
     console.log("date  ",date1);
+        console.log("distance................  ",distance);
+
 
 
        //age , gender , fare

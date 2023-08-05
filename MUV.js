@@ -15,11 +15,9 @@ const Regular = ({ formData }) => {
     const [droppin, setdroppin] = useState(null); // Add fare state
 
 
-  
- const parsedFormData = JSON.parse(JSON.stringify(formData));
+   const parsedFormData = JSON.parse(JSON.stringify(formData));
   const tripType = parsedFormData.tripType;
 
-  
 
   useEffect(() => {
     navigation.setOptions({
@@ -47,7 +45,7 @@ const Regular = ({ formData }) => {
     });
   }, []);
 
-  useEffect(() => {
+ useEffect(() => {
     fetch("https://aimcabbooking.com/admin/fetch_data.php?table=cabinfo")
       .then((response) => response.json())
       .then((responseData) => {
@@ -175,27 +173,37 @@ fetch('https://aimcabbooking.com/get_pincode_api.php', {
         });
     }
   }, [pickuppin, droppin]);
+
   let farePrice = null; // Declare a variable to store the fare price
 
   if (fare) {
     // Check if the fare state is available
     const fareObject = fare[0]; // Assuming the fare data is an array with a single object
-    farePrice = fareObject.hatchback; // Store the fare price in the variable
+    farePrice = fareObject.suv; // Store the fare price in the variable
   }
-
-
-
- let roundfarePrice = null; // Declare a variable to store the fare price
+   let roundfarePrice = null; // Declare a variable to store the fare price
 
   if (roundfare) {
     // Check if the fare state is available
     const roundfareObject = roundfare[0]; // Assuming the fare data is an array with a single object
-    roundfarePrice = roundfareObject.hatchback; // Store the fare price in the variable
+    roundfarePrice = roundfareObject.suv; // Store the fare price in the variable
   }
 
 
+  let farePrice2 = null; // Declare a variable to store the fare price
 
+  if (fare) {
+    // Check if the fare state is available
+    const fareObject = fare[0]; // Assuming the fare data is an array with a single object
+    farePrice2 = fareObject.suvplus; // Store the fare price in the variable
+  }
+   let roundfarePrice2 = null; // Declare a variable to store the fare price
 
+  if (roundfare) {
+    // Check if the fare state is available
+    const roundfareObject = roundfare[0]; // Assuming the fare data is an array with a single object
+    roundfarePrice2 = roundfareObject.suvplus; // Store the fare price in the variable
+  }
 
   const scrollY = new Animated.Value(0);
   const headerHeight = scrollY.interpolate({
@@ -207,7 +215,7 @@ fetch('https://aimcabbooking.com/get_pincode_api.php', {
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.header, { height: headerHeight }]}>
-        <Text style={styles.headerTitle}></Text>
+        <Text style={styles.headerTitle}>AimCabBooking</Text>
         <Ionicons name="notifications-outline" size={24} color="white" style={styles.notificationIcon} />
       </Animated.View>
       <ScrollView
@@ -219,9 +227,9 @@ fetch('https://aimcabbooking.com/get_pincode_api.php', {
         )}
         scrollEventThrottle={16}
       >
-        <View style={styles.cardsContainer}>
+        {/* <View style={styles.cardsContainer}>
           {data
-            .filter((item) => item.model_type === "HATCHBACK")
+             .filter((item) => item.model_type === "SUV" )
             .map((item) => (
               <Card
                 key={item.id}
@@ -234,6 +242,27 @@ fetch('https://aimcabbooking.com/get_pincode_api.php', {
                 fare1={farePrice}
                 roundfare1={roundfarePrice}
                 triptype={tripType}
+
+              />
+            ))}
+        </View> */}
+
+         <View style={styles.cardsContainer1}>
+          {data
+             .filter((item) =>  item.model_type === "MUV")
+            .map((item) => (
+              <Card
+                key={item.id}
+                data={item}
+                distance1={formData.distance}
+                time={formData.selectedTime}
+                pickup={formData.pickupLocation}
+                drop={formData.dropLocation}
+                date={formData.selectedDates}
+                fare1={farePrice2}
+                roundfare1={roundfarePrice2}
+                triptype={tripType}
+
               />
             ))}
         </View>
@@ -279,6 +308,10 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   cardsContainer: {
+    padding: 10,
+    marginBottom: -10, // Adjust the marginBottom to leave space for the bottom navigation
+  },
+   cardsContainer1: {
     padding: 10,
     marginBottom: 100, // Adjust the marginBottom to leave space for the bottom navigation
   },

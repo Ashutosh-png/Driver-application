@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "test_app",
+    "name": "Aimcab",
     "slug": "test_app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,23 +17,28 @@
     "ios": {
       "supportsTablet": true,
       "config": {
-    "googleMapsApiKey": "AIzaSyDjIsbaqcr8co379nw6IKnPmAA0Hf5IyeI"
-  }
+        "googleMapsApiKey": "AIzaSyDjIsbaqcr8co379nw6IKnPmAA0Hf5IyeI"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-         
       },
       "config": {
-    "googleMaps": {
-      "apiKey": "AIzaSyDjIsbaqcr8co379nw6IKnPmAA0Hf5IyeI"
-    }
-  }
+        "googleMaps": {
+          "apiKey": "AIzaSyDjIsbaqcr8co379nw6IKnPmAA0Hf5IyeI"
+        }
+      },
+      "package": "com.ashutosh1239.test_app"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c04ba69d-561b-444c-aec4-329eb13076c6"
+      }
     }
   }
 }

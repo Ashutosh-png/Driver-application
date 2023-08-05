@@ -199,6 +199,18 @@ const Home = () => {
           ),
         }}
       />
+      
+     
+      <Tab.Screen
+        name="Trips"
+        component={Trip}
+        options={{
+          tabBarLabel: 'Trips',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="map" size={size} color={color} />
+          ),
+        }}
+      /> 
       <Tab.Screen
         name="Offers"
         component={Offers} // Replace "Offers" with your Offers component
@@ -219,17 +231,8 @@ const Home = () => {
           ),
         }}
       />
-      <Tab.Screen
-        name="Trips"
-        component={Trip}
-        options={{
-          tabBarLabel: 'Trips',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="map" size={size} color={color} />
-          ),
-        }}
-      />
     </Tab.Navigator>
+    
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 const Card = ({ data, distance1, fare1, triptype, time, pickup, drop, date, roundfare1 }) => {
@@ -87,34 +87,82 @@ navigation.navigate("invoice", { startDate,endDate,st, fl,modelType, modelName: 
   const imageUrl =
     "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,w_956,h_537/v1568134115/assets/6d/354919-18b0-45d0-a151-501ab4c4b114/original/XL.png";
 
-  return (
+ return (
     <View style={styles.card}>
       <View style={styles.cardContent}>
-        <View style={styles.textContainer}>
-          <Text style={styles.place}>{data.model_name}</Text>
-          <Text style={styles.shortDescription}>
-            Model:
-            <Text style={styles.value}> {data.model_type}</Text>
-          </Text>
-          <Text style={styles.shortDescription}>
-            Seats:
-            <Text style={styles.value}> {data.seats}</Text>
-          </Text>
-          <Text style={styles.shortDescription}>
-            Fuel:
-            <Text style={styles.value}> {data.fuel_type}</Text>
-          </Text>
-          <Text style={styles.shortDescription}>
-            Price:
-            <Text style={styles.value}>{price}</Text>
-          </Text>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={handleBooking}>
-              <Text style={styles.buttonText}>Book Now</Text>
-            </TouchableOpacity>
+        <View style={styles.topContainer}>
+          <View style={styles.leftColumn}>
+            <Text style={styles.modelType}>{data.model_type}</Text>
+            <Text style={styles.modelName}>{data.model_name}</Text>
+            <Text style={styles.price}>Price: {price}</Text>
+          </View>
+          <Image source={{ uri: imageUrl }} style={styles.cardImage} />
+        </View>
+        <View style={styles.bottomContainer}>
+          <View style={styles.column}>
+            <Text style={styles.title}>Features:</Text>
+
+            <View style={styles.featureContainer}>
+              <FontAwesome5
+                name="gas-pump"
+                style={[styles.featureIcon, { color: "#FF4500" }]}
+                solid
+              />
+              <Text style={styles.featureText}>{data.fuel_type}</Text>
+            </View>
+            <View style={styles.featureContainer}>
+              <FontAwesome5
+                name="usb"
+                style={[styles.featureIcon, { color: "#4169E1" }]}
+                solid
+              />
+              <Text style={styles.featureText}>USB Charging </Text>
+            </View>
+            <View style={styles.featureContainer}>
+              <FontAwesome5
+                name="snowflake"
+                style={[styles.featureIcon, { color: "#00BFFF" }]}
+                solid
+              />
+              <Text style={styles.featureText}>Air Conditioning</Text>
+            </View>
+          </View>
+          <View style={styles.column}>
+            <View style={styles.featureContainer}>
+              <Text></Text>
+            </View>
+            <View style={styles.featureContainer}>
+              <FontAwesome5
+                name="music"
+                style={[styles.featureIcon, { color: "#8A2BE2" }]}
+                solid
+              />
+              <Text style={styles.featureText}>Music System</Text>
+            </View>
+            <View style={styles.featureContainer}>
+              <FontAwesome5
+                name="suitcase"
+                style={[styles.featureIcon, { color: "#32CD32" }]}
+                solid
+              />
+              <Text style={styles.featureText}>Capacity: 3 bags</Text>
+            </View>
+            <View style={styles.featureContainer}>
+              <FontAwesome5
+                name="hotel"
+                style={[styles.featureIcon, { color: "#FF8C00" }]}
+                solid
+              />
+              <Text style={styles.featureText}>FastStay & 1 More</Text>
+            </View>
           </View>
         </View>
-        <Image source={{ uri: imageUrl }} style={styles.cardImage} />
+
+        <TouchableOpacity style={styles.buttonContainer} onPress={handleBooking}>
+          <View style={styles.button}>
+            <Text style={styles.buttonText}>Book Now</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -123,8 +171,8 @@ navigation.navigate("invoice", { startDate,endDate,st, fl,modelType, modelName: 
 const styles = {
   card: {
     backgroundColor: "#fff",
-    borderRadius: 25,
-    marginHorizontal: 12,
+    borderRadius: 20,
+    marginHorizontal: 20,
     marginVertical: 10,
     shadowColor: "#000",
     shadowOffset: {
@@ -132,49 +180,86 @@ const styles = {
       height: 2,
     },
     shadowOpacity: 0.25,
-    shadowRadius: 5.84,
-    elevation: 8,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   cardContent: {
-    flexDirection: "row",
     padding: 15,
+  },
+  topContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
+  },
+  leftColumn: {
+    flex: 1,
+  },
+  modelType: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginBottom: 5,
+    color: "#333",
+  },
+  modelName: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#333",
+  },
+  fuelType: {
+    fontSize: 16,
+    marginBottom: 10,
+    color: "#666",
+  },
+  price: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#007bff",
   },
   cardImage: {
     width: 140,
     height: 70,
-    borderTopRightRadius: 25,
-    resizeMode: "cover",
-    justifyContent: "flex-end",
-    alignItems: "center",
+    borderRadius: 10,
+    marginLeft: 20,
   },
-  textContainer: {
+  bottomContainer: {
+    flexDirection: "row",
+  },
+  column: {
     flex: 1,
-    marginLeft: 10,
   },
-  place: {
-    fontSize: 24,
+  title: {
+    fontSize: 16,
     fontWeight: "bold",
     marginBottom: 10,
+    color: "#333",
   },
-  shortDescription: {
-    fontSize: 16,
+  featureContainer: {
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 5,
   },
-  value: {
+  featureIcon: {
     fontSize: 16,
-    marginBottom: 10,
+    marginRight: 5,
+  },
+  featureText: {
+    fontSize: 14,
+    color: "#666",
   },
   buttonContainer: {
-    flex: 1,
-    marginTop: 10,
+    marginTop: 15,
     alignItems: "center",
-    justifyContent: "flex-end",
   },
   button: {
-    backgroundColor: "#007bff",
     borderRadius: 15,
     paddingVertical: 10,
-    paddingHorizontal: 16,
+    paddingHorizontal: 25,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#007bff",
+    borderWidth: 2,
+    borderColor: "#0056b3",
   },
   buttonText: {
     color: "#fff",
