@@ -112,8 +112,9 @@ android {
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion 33
+    
 
-    namespace "com.aimcab"
+    namespace "com.ashutosh1239.test_app"
     defaultConfig {
         manifestPlaceholders = [appAuthRedirectScheme: 'dev.expo.app']
         applicationId 'com.ashutosh1239.test_app'
