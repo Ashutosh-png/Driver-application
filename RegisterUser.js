@@ -267,27 +267,27 @@ const RegisterUser = () => {
       />
       {!!phoneError && <Text style={styles.errorText}>{phoneError}</Text>}
       <View style={styles.genderContainer}>
-        <Text style={styles.label}>Gender:</Text>
+        <Text style={styles.label}>Role:</Text>
         <View style={styles.genderButtonContainer}>
           <Pressable
             style={[
               styles.genderButton,
-              gender === 'male' && styles.genderButtonSelected,
+              gender === 'driver' && styles.genderButtonSelected,
               !!genderError && styles.genderButtonError,
             ]}
-            onPress={() => handleGenderSelect('male')}
+            onPress={() => handleGenderSelect('driver')}
           >
-            <Text style={styles.genderButtonText}>Male</Text>
+            <Text style={styles.genderButtonText}>Driver</Text>
           </Pressable>
           <Pressable
             style={[
               styles.genderButton,
-              gender === 'female' && styles.genderButtonSelected,
+              gender === 'vendor' && styles.genderButtonSelected,
               !!genderError && styles.genderButtonError,
             ]}
-            onPress={() => handleGenderSelect('female')}
+            onPress={() => handleGenderSelect('vendor')}
           >
-            <Text style={styles.genderButtonText}>Female</Text>
+            <Text style={styles.genderButtonText}>Vendor</Text>
           </Pressable>
         </View>
       </View>

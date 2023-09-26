@@ -8,8 +8,8 @@ import { Ionicons } from "@expo/vector-icons";
 const Loginpage = () => {
   const navigation = useNavigation();
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [showemail, setShowEmail] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showSkipButton, setShowSkipButton] = useState(false);
 
@@ -24,12 +24,12 @@ const Loginpage = () => {
   const handleLogin = () => {
     // Create a JSON object with username and password
     const data = {
-      username: username,
-      password: password
+      name: username,
+      email: email
     };
 
     // Send the data to the login endpoint
-    fetch('https://aimcabbooking.com/userlogin/login-api.php', {
+    fetch('https://aimcabbooking.com/userlogin/driver-login-api.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -89,18 +89,18 @@ const Loginpage = () => {
 
           <TextInput
             style={[styles.input, { width: "100%" }]}
-            placeholder="password"
+            placeholder="Email"
             placeholderTextColor="white"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry={!showPassword}
+            value={email}
+            onChangeText={setEmail}
+            secureTextEntry={!showemail}
           />
           <TouchableOpacity
             style={styles.passwordToggle}
-            onPress={() => setShowPassword(!showPassword)}
+            onPress={() => setShowEmail(!showemail)}
           >
             <Ionicons
-              name={showPassword ? "eye-off" : "eye"}
+              name={showemail ? "eye-off" : "eye"}
               size={24}
               color="white"
             />
@@ -125,7 +125,7 @@ const Loginpage = () => {
           ) : null}
         </View>
 
-        {showSkipButton ? (
+        {/* {showSkipButton ? (
           <TouchableOpacity style={styles.skipButton} onPress={handleSkipTest}>
             <Text style={styles.skipButtonText}>Skip</Text>
           </TouchableOpacity>
@@ -133,7 +133,7 @@ const Loginpage = () => {
           <View style={styles.loadingContainer}>
             <ActivityIndicator color="#FFF" size="small" />
           </View>
-        )}
+        )} */}
       </View>
     </View>
   );
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#003580",
+    backgroundColor: "black",
     padding: 20,
     width: "100%",
   },

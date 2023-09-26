@@ -13,6 +13,10 @@ import invoice from './invoice'
 import Payment from './Payment'
 import Loginpage from './Loginpage'
 import RegisterUser from './RegisterUser';
+import 'react-native-gesture-handler';
+import TripDetails from './TripDetails';
+import startTrip from './startTrip'
+
 
 
 const Stack = createStackNavigator();
@@ -35,6 +39,10 @@ export default function App() {
         <Stack.Screen name="invoice" component={invoice} />
         <Stack.Screen name="Payment" component={Payment} />
         <Stack.Screen name="RegisterUser" component={RegisterUser} />
+        <Stack.Screen name="TripDetails" component={TripDetails} />
+                <Stack.Screen name="startTrip" component={startTrip} />
+
+
 
 
 

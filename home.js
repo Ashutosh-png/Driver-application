@@ -1,62 +1,81 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable, Image, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity,Animated } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from @expo/vector-icons
+import { Ionicons } from '@expo/vector-icons';
 import Header from './Components/Header';
-import { TouchableOpacity } from 'react-native';
-
-
+import MapView, { Marker } from 'react-native-maps';
+import { Location,Permissions} from 'expo';
 // Import other components/screens if needed
-import BookPage from './BookPage';
+//import BookPage from './BookPage';
 import Trip from './Trip';
 import Offers from './Offers';
 import Profile from './Profile';
 
-const HomePage = ({ navigation }) => {
-  const handleTaxiPress = () => {
-    navigation.navigate('BookPage');
-  };
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerShown: true,
-      title: '',
-      headerTitleStyle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: 'white',
-      },
-      headerStyle: {
-        backgroundColor: '#003580',
-        height: 110,
-        borderBottomColor: 'transparent',
-        shadowColor: 'transparent',
-      },
-      headerRight: () => (
-        <Ionicons
-          name="notifications-outline"
-          size={24}
-          color="white"
-          style={{ marginRight: 12 }}
-        />
-      ),
+
+  const HomePage = ({ navigation }) => {
+    
+      const [userLocation, setUserLocation] = useState({
+        latitude: 37.78825,
+        longitude: -122.4324,
     });
-  }, []);
+    const [isOnline, setIsOnline] = useState(true);
 
+    const handlePress = () => {
+      setIsOnline(!isOnline);
+    };
+  
+    const buttonColor = isOnline ? 'green' : 'grey';
+    const onlineTextOpacity = isOnline ? 1 : 0.6;
+    const offlineTextOpacity = isOnline ? 0.6 : 1;
+    useEffect(() => {
+      (async () => {
+        const { status } = await Permissions.askAsync(Permissions.LOCATION);
+  
+        if (status === 'granted') {
+          const location = await Location.getCurrentPositionAsync({});
+          console.log("Location Data:", location);
+          setUserLocation({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          });
+        } else {
+          // Handle the case where location permission is not granted
+          console.log('Location permission denied');
+        }
+      })();
+    }, []);
+ 
   return (
-    <View style={styles.container}>
+    <View>
       <Header />
-      <View style={styles.searchBar}>
-        {/* Your search bar component goes here */}
-        <TextInput
-      placeholder="Search"
-      style={styles.searchInput}
-      // Add any necessary event handlers or functionality
-    />  
-  
-  
-      </View>
-      <View style={styles.iconContainer}>
+      <View style={styles.buttoncontainer}>
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: buttonColor }]}
+        onPress={handlePress}
+      >
+        <Text style={[styles.buttonText, { opacity: onlineTextOpacity }]}>Online</Text>
+        <Text style={[styles.buttonText, { opacity: offlineTextOpacity }]}>Offline</Text>
+      </TouchableOpacity>
+    </View>
+    <View style={styles.mapcontainer}>
+  {userLocation.latitude && userLocation.longitude ? (
+          <MapView
+          style={{ flex: 1 }}
+          initialRegion={{
+            latitude: userLocation.latitude,
+            longitude: userLocation.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        >
+          <Marker coordinate={userLocation} title="Your Location" />
+        </MapView>
+  ) : (
+    <Text>Loading map...</Text>
+  )}
+</View>
+      {/* <View style={styles.iconContainer}>
         <View style={styles.iconWrapper}>
           <TouchableOpacity onPress={handleTaxiPress} >
           <View style={styles.icon}>
@@ -83,11 +102,11 @@ const HomePage = ({ navigation }) => {
           </View>
         
         </View>
-      </View>
-      <View style={styles.content}>
+      </View> 
+      {/* <View style={styles.content}>
         <Text></Text>
-      </View>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      </View> 
+      {/* <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <Pressable
           style={{
             width: 200,
@@ -165,9 +184,9 @@ const HomePage = ({ navigation }) => {
             Enjoy Discounts at participating properties worldwide
           </Text>
         </Pressable>
-      </ScrollView>
+      </ScrollView> 
 
-      <Pressable
+      {/* <Pressable
         style={{
           marginTop: 40,
           justifyContent: 'center',
@@ -175,7 +194,7 @@ const HomePage = ({ navigation }) => {
         }}
       >
         
-      </Pressable>
+      </Pressable> */}
       
     </View>
   );
@@ -242,19 +261,30 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginTop: 0,
   },
-  searchBar: {
-    height: 40,
-    backgroundColor: 'white',
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-    padding:2,
-    borderColor:'#9ea3a0',
-    borderWidth:2,
-    borderRadius:22,
-    margin:10,
+ 
+  mapcontainer:{
+    height:650,
 
-    
   },
+  button:{
+  width: '100%', // Make the button span the full width
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    
+    flexDirection: 'row', // Make the text elements side by side
+},
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    marginHorizontal: 10,
+  },
+  containerbutton:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+ 
   iconContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -267,14 +297,7 @@ const styles = StyleSheet.create({
   iconWrapper: {
     alignItems: 'center',
   },
-  icon: {
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 10,
-     borderColor: '#003580', // Add a black border color if needed
-    borderWidth: 0,
-    
-  },
+ 
   iconText: {
     marginTop: 5,
     fontSize: 20,

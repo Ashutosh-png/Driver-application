@@ -150,7 +150,10 @@ android {
     }
     buildTypes {
         debug {
-  signingConfig signingConfigs.release        }
+  signingConfig signingConfigs.debug   
+    signingConfig signingConfigs.release      
+   
+    }
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
@@ -201,6 +204,8 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+    implementation ("com.facebook.android:facebook-android-sdk:4.40.0")
+
 
     def isGifEnabled = (findProperty('expo.gif.enabled') ?: "") == "true";
     def isWebpEnabled = (findProperty('expo.webp.enabled') ?: "") == "true";

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet , ScrollView , RefreshControl} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from '@react-navigation/native';
 
 
 const TripCard = ({ trip }) => {
   const { user_pickup, user_drop, time, date, status, car } = trip;
-  const timeOnly = time.split('T')[1].split('.')[0]; // Extracting the time portion from the 'time' string
+  const timeOnly = time ; // Check if 'time' is defined
+  const navigation = useNavigation();
+
 
   return (
     <View style={styles.card}>
@@ -43,7 +46,27 @@ const TripCard = ({ trip }) => {
           <Ionicons name="calendar" size={14} color="#999" />
           {date}
         </Text>
+             
+
       </View>
+
+      <TouchableOpacity
+    onPress={() => {
+      // Handle the "Start Trip" button click event here
+      // You can add the logic to start the trip
+          navigation.navigate('TripDetails', { trip });
+
+    }}
+    style={{
+      backgroundColor: 'green',
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      borderRadius: 5,
+      marginTop: 10, // Adjust the margin as needed
+    }}
+  >
+    <Text style={{ color: 'white', fontWeight: 'bold' }}>Start Trip</Text>
+  </TouchableOpacity>
     </View>
   );
 };
@@ -51,14 +74,14 @@ const TripCard = ({ trip }) => {
 const YourTrips = () => {
   const [trips, setTrips] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [userData, setUserData] = useState("");
-  const [userid, setUserid] = useState("");
+  const [driverId, setDriverId] = useState(""); // Use driverId instead of userid
 
-  // Function to fetch trips data using 'userid'
-  const fetchTripsData = (userId) => {
-    fetch(`https://aimcabbooking.com/admin/fetch_trip.php?userid=${userId}`)
+  // Function to fetch trips data using 'driverId'
+  const fetchTripsData = (driverId) => {
+    fetch(`https://aimcabbooking.com/admin/fetch-driver-trip.php?driverid=${driverId}`) // Use the correct API endpoint
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setTrips(data); // Update the 'trips' state with the fetched data
         setRefreshing(false); // Stop the refreshing indicator
       })
@@ -71,7 +94,7 @@ const YourTrips = () => {
   // Function to handle pull-to-refresh action
   const onRefresh = () => {
     setRefreshing(true);
-    fetchTripsData(userid); // Fetch trips data again with the 'userid'
+    fetchTripsData(driverId); // Fetch trips data again with the 'driverId'
   };
 
   useEffect(() => {
@@ -81,10 +104,9 @@ const YourTrips = () => {
         const fetchedData = await AsyncStorage.getItem("userData");
         if (fetchedData !== null) {
           const user = JSON.parse(fetchedData);
-          console.log("Invoice: " + JSON.stringify(user));
-          setUserData(user);
-          setUserid(user.userid);
-          fetchTripsData(user.userid); // Fetch trips data using the 'userid'
+          console.log("User Data: " + JSON.stringify(user));
+          setDriverId(user.driverid); // Use the driver ID from the user data
+          fetchTripsData(user.driverid); // Fetch trips data using the 'driverId'
         }
       } catch (error) {
         console.error("Error retrieving user data:", error);
@@ -93,20 +115,23 @@ const YourTrips = () => {
     fetchData();
   }, []);
 
- return (
+  return (
     <ScrollView
       style={styles.container}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
-      {trips.map((trip, index) => (
-        <TripCard trip={trip} key={index} />
-      ))}
+      {trips.length === 0 ? (
+        <Text>No trips available.</Text>
+      ) : (
+        trips.map((trip, index) => (
+          <TripCard trip={trip} key={index} />
+        ))
+      )}
     </ScrollView>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -152,25 +177,7 @@ const styles = StyleSheet.create({
     color: '#333',
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  subTitle: {
-    fontSize: 16,
-    color: '#666',
-  },
-  details: {
-    fontSize: 14,
-    color: '#999',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-   title: {
-    flex: 1, // Add flex: 1 to make sure the title takes the remaining width in the row
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    flexDirection: 'row',
-    alignItems: 'center',
-    maxWidth: '45%', // Set a maximum width for the title text
+    maxWidth: '45%',
   },
 });
 
