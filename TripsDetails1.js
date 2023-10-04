@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 
-function TripDetails({ route }) {
+function TripDetails1({ route }) {
   const { trip } = route.params;
     const navigation = useNavigation();
 
@@ -32,7 +32,7 @@ function TripDetails({ route }) {
         }
         // No need to parse JSON response since none is expected
         console.log('Garage Out request successful');
-                navigation.navigate('DrivertoUser', { trip });
+                navigation.navigate('StartTrip', { trip });
 
         // You can navigate to the Home screen or perform other actions here
       })
@@ -44,6 +44,7 @@ function TripDetails({ route }) {
    return (
     <View>
       {/* User Pickup Card */}
+      
       <View style={styles.card}>
         <Text style={styles.cardTitle}>User Pickup:</Text>
         <Text style={styles.value}>{trip.user_pickup}</Text>
@@ -59,12 +60,24 @@ function TripDetails({ route }) {
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Trip Details:</Text>
         <View style={styles.detailRow}>
+          <Text style={styles.label}>User Name:</Text>
+          <Text style={styles.value}>{trip.username}</Text>
+        </View>
+        <View style={styles.detailRow}>
           <Text style={styles.label}>Booking ID:</Text>
           <Text style={styles.value}>{trip.bookid}</Text>
         </View>
         <View style={styles.detailRow}>
           <Text style={styles.label}>Booking Type:</Text>
           <Text style={styles.value}>{trip.bookingtype}</Text>
+        </View>
+        <View style={styles.detailRow}>
+          <Text style={styles.label}>Distance:</Text>
+          <Text style={styles.value}>{trip.distance}</Text>
+        </View>
+        <View style={styles.detailRow}>
+          <Text style={styles.label}>Fare:</Text>
+          <Text style={styles.value}>{trip.fare}</Text>
         </View>
         <View style={styles.detailRow}>
           <Text style={styles.label}>Cab ID:</Text>
@@ -75,8 +88,8 @@ function TripDetails({ route }) {
           <Text style={styles.value}>{trip.car}</Text>
         </View>
         <View style={styles.detailRow}>
-          <Text style={styles.label}>Created At:</Text>
-          <Text style={styles.value}>{trip.created_at}</Text>
+          <Text style={styles.label}>Time:</Text>
+          <Text style={styles.value}>{trip.time}</Text>
         </View>
         <View style={styles.detailRow}>
           <Text style={styles.label}>Date:</Text>
@@ -94,13 +107,12 @@ function TripDetails({ route }) {
           <Text style={styles.label}>Phone:</Text>
           <Text style={styles.value}>{trip.phone}</Text>
         </View>
+        
         {/* Add more detail rows for other trip details */}
       </View>
 
-      {/* Garage Out Button */}
-      <TouchableOpacity style={styles.button} onPress={handleGarageOut}>
-        <Text style={styles.buttonText}>Garage Out</Text>
-      </TouchableOpacity>
+     
+      
     </View>
   );
 }
@@ -142,4 +154,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TripDetails;
+export default TripDetails1;

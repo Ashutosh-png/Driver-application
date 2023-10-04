@@ -15,7 +15,17 @@ import Loginpage from './Loginpage'
 import RegisterUser from './RegisterUser';
 import 'react-native-gesture-handler';
 import TripDetails from './TripDetails';
-import startTrip from './startTrip'
+import startTrip from './startTrip';
+import MapNavigate from './MapNavigate';
+import CurrentLocation from './CurrentLocation';
+import DrivertoUser from './DrivertoUser';
+import PickupToDrop from './PickupToDrop';
+import EndTrip  from './EndTrip';
+import CancelTrip from './CancelTrip';
+import UpcomingTrip from './UpcomingTrip';
+import OngoingTrip from './OngoingTrip';
+import CompletTrip from './CompletTrip';
+import TripDetails1 from './TripsDetails1';
 
 
 
@@ -41,6 +51,24 @@ export default function App() {
         <Stack.Screen name="RegisterUser" component={RegisterUser} />
         <Stack.Screen name="TripDetails" component={TripDetails} />
                 <Stack.Screen name="startTrip" component={startTrip} />
+                                <Stack.Screen name="MapNavigate" component={MapNavigate} />
+                         <Stack.Screen name="CurrentLocation" component={CurrentLocation} />
+                   <Stack.Screen name="DrivertoUser" component={DrivertoUser} />
+                  <Stack.Screen name="PickupToDrop" component={PickupToDrop} />
+                  <Stack.Screen name="EndTrip" component={EndTrip} />
+               <Stack.Screen name="CancelTrip" component={CancelTrip} />
+                            <Stack.Screen name="CompletTrip" component={CompletTrip} /> 
+         <Stack.Screen name="OngoingTrip" component={OngoingTrip} />
+         <Stack.Screen name="UpcomingTrip" component={UpcomingTrip} />
+                  <Stack.Screen name="TripDetails1" component={TripDetails1} />
+
+
+
+
+
+
+
+
 
 
 

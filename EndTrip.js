@@ -73,14 +73,15 @@ function StartTrip({ route }) {
     console.log(responseJson);
 
     if (responseJson.hasOwnProperty('email')) {
+      try {
 
-      const kilometerData = {
+         const kilometerData = {
           odometerValue: kilometers, // Assuming 'kilometers' is the state variable for the entered kilometers
           bookid: trip.bookid,
           id:trip.id
         };
 
-        const kilometerResponse = await fetch('https://aimcabbooking.com/admin/odometer-start-api.php', {
+        const kilometerResponse = await fetch('https://aimcabbooking.com/admin/odometer-end-api.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -89,15 +90,11 @@ function StartTrip({ route }) {
         });
 
         if (kilometerResponse.ok) {
-          console.log('Kilometers sent successfully to kilometer.php');
+          console.log('Kilometers sent successfully to the other API');
         } else {
-          console.error('Failed to send kilometers to kilometer.php');
+          console.error('Failed to send kilometers to the other API');
         }
 
-        // Continue with the rest of your logic
-    
-      
-      try {
        // await AsyncStorage.setItem('userData', JSON.stringify(responseJson.email));
         setVerificationMessage('OTP verification successful'); // Update the verification message
 
@@ -108,20 +105,12 @@ function StartTrip({ route }) {
 
         console.log(trip.bookid);
 
-        const startTripResponse = await fetch(`https://aimcabbooking.com/admin/trip-start-api.php?bookid=${trip.bookid}&id=${trip.id}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
+       
 
-        if (!startTripResponse.ok) {
-          throw new Error('Network response was not ok for start-trip-api');
-        }
+       
 
         console.log('Garage Out request successful');
-        navigation.navigate('PickupToDrop', { trip });
+        navigation.navigate('Home');
       } catch (error) {
         console.error('Error saving user data or starting trip:', error);
       }
@@ -232,30 +221,7 @@ function StartTrip({ route }) {
 
       {/* Verification Message */}
       <Text style={styles.verificationMessage}>{verificationMessage}</Text>
-      <View style={styles.driverSelfieContainer}>
-  <Text style={styles.driverSelfieLabel}>Driver Selfie:</Text>
-  {driverSelfieUri ? (
-    <Image source={{ uri: driverSelfieUri }} style={styles.driverSelfieImage} />
-  ) : (
-    <Camera
-      style={styles.camera}
-      type={Camera.Constants.Type.front}
-      ref={(ref) => setCameraRef(ref)}
-    >
-      <TouchableOpacity
-        style={styles.captureButton}
-        onPress={handleDriverSelfieCapture}
-      >
-        <Text style={styles.captureButtonText}>Upload Selfie</Text>
-      </TouchableOpacity>
-    </Camera>
-  )}
-
-  {/* Upload Selfie Button */}
-  {/* <TouchableOpacity style={styles.uploadButton} onPress={handleDriverSelfieCapture}>
-    <Text style={styles.uploadButtonText}>Upload Selfie</Text>
-  </TouchableOpacity> */}
-</View>
+     
 
 
 
@@ -264,7 +230,7 @@ function StartTrip({ route }) {
 
       {/* Button */}
      <TouchableOpacity style={styles.button} onPress={handleOtpVerification}>
-        <Text style={styles.buttonText}>Start Trip</Text>
+        <Text style={styles.buttonText}>Complete Trip</Text>
       </TouchableOpacity>
     </View>
   );

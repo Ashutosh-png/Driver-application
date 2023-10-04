@@ -24,6 +24,14 @@ import Profile from './Profile';
     const handlePress = () => {
       setIsOnline(!isOnline);
     };
+
+     const handleMapNavigate = () => {
+    navigation.navigate('MapNavigate'); // Navigate to the 'MapNavigate' screen
+  };
+
+   const handleCurrent = () => {
+    navigation.navigate('CurrentLocation'); // Navigate to the 'MapNavigate' screen
+  };
   
     const buttonColor = isOnline ? 'green' : 'grey';
     const onlineTextOpacity = isOnline ? 1 : 0.6;
@@ -57,6 +65,19 @@ import Profile from './Profile';
         <Text style={[styles.buttonText, { opacity: onlineTextOpacity }]}>Online</Text>
         <Text style={[styles.buttonText, { opacity: offlineTextOpacity }]}>Offline</Text>
       </TouchableOpacity>
+       <TouchableOpacity
+          style={styles.mapNavigateButton}
+          onPress={handleMapNavigate}
+        >
+          <Text style={styles.mapNavigateButtonText}>Go to Map</Text>
+        </TouchableOpacity>
+
+         <TouchableOpacity
+          style={styles.mapNavigateButton}
+          onPress={handleCurrent}
+        >
+          <Text style={styles.mapNavigateButtonText}>Go to current</Text>
+        </TouchableOpacity>
     </View>
     <View style={styles.mapcontainer}>
   {userLocation.latitude && userLocation.longitude ? (
