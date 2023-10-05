@@ -129,6 +129,15 @@ function StartTrip({ route }) {
           const data = {
             bookid: trip.bookid,
             email:trip.email,
+            name:trip.name,
+            car:trip.car,
+            date:trip.date,
+            distance:trip.distance,
+            time:trip.time,
+            userdrop:trip.user_drop,
+            userpickup:trip.user_pickup,
+            usertriptype:trip.user_trip_type,
+            amount:trip.amount
           };
   
           console.log(trip.bookid);
@@ -144,7 +153,7 @@ function StartTrip({ route }) {
         }
 
         console.log('Garage Out request successful');
-        navigation.navigate('PickupToDrop', { trip });
+        navigation.navigate('PickupToDrop', { trip, odostart:kilometers });
       } catch (error) {
         console.error('Error saving user data or starting trip:', error);
       }

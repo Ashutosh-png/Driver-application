@@ -8,7 +8,7 @@ import * as MediaLibrary from 'expo-media-library';
 
 function StartTrip({ route }) {
   const navigation = useNavigation();
-  const { trip } = route.params;
+  const { trip, odostart } = route.params;
   console.log(trip);
   const [kilometers, setKilometers] = useState('');
   const [otp, setOtp] = useState(['', '', '', '', '', '']); // Initialize OTP with six empty strings
@@ -103,14 +103,17 @@ function StartTrip({ route }) {
           console.log('Kilometers sent successfully to the other API');
 
            const kilometerData = {
-            km:kilometers-trip.odometer_start,
+           km:kilometers-odostart,
           email: trip.email, // Assuming 'kilometers' is the state variable for the entered kilometers
           bookid: trip.bookid,
-          id:trip.id
+          id:trip.id,
+          amount:trip.amount,
+          distance:trip.distance,
+          baseAmount:trip.baseAmount,
         };
         console.log("first",kilometers-trip.odometer_start);
                 console.log("second",trip.odometer_start-kilometers);
-
+ console.log("odo start",odostart);
         console.log(trip.odometer_start);
         console.log(kilometers);
 

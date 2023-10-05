@@ -53,7 +53,7 @@ function InputAutocomplete({
 }
 
 const MapPage = ({ route }) => {
-  const { trip } = route.params;
+  const { trip, odostart } = route.params;
   const navigation = useNavigation();
 
 
@@ -166,7 +166,7 @@ const MapPage = ({ route }) => {
       // }
 
       console.log(trip.bookid, "bookid in end trip");
-      navigation.navigate('EndTrip', { trip }); // Navigate to the 'EndTrip' screen
+      navigation.navigate('EndTrip', { trip, odostart }); // Navigate to the 'EndTrip' screen
     })
     .catch((error) => {
       console.error('Error:', error);
@@ -204,7 +204,7 @@ const MapPage = ({ route }) => {
     // Update location every one minute
     const locationInterval = setInterval(() => {
       updateLocation();
-    }, 1000); // 60 seconds
+    }, 500); // 60 seconds
 
     // Clean up the interval when the component unmounts
     return () => {
