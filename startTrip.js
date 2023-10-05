@@ -29,16 +29,23 @@ function StartTrip({ route }) {
 
   // Function to handle OTP input for each digit
   const handleOtpInput = (text, index) => {
-    // Check if the entered text is a digit
+    // Check if the entered text is a digit or empty
     if (/^\d+$/.test(text) || text === '') {
       const newOtp = [...otp];
       newOtp[index] = text;
       setOtp(newOtp);
-
+  
       // Move focus to the next input if not the last input
-      if (index < otp.length - 1) {
+      if (index < otp.length - 1 && (text !== '' || newOtp[index + 1] !== '')) {
         otpInputRefs.current[index + 1].focus();
       }
+    }
+  };
+  
+  const handleBackspace = (text, index) => {
+    if (text === '' && index > 0) {
+      // Move focus to the previous input when removing data
+      otpInputRefs.current[index - 1].focus();
     }
   };
 
@@ -118,6 +125,22 @@ function StartTrip({ route }) {
 
         if (!startTripResponse.ok) {
           throw new Error('Network response was not ok for start-trip-api');
+        }else if(startTripResponse.ok){
+          const data = {
+            bookid: trip.bookid,
+            email:trip.email,
+          };
+  
+          console.log(trip.bookid);
+  
+          const startTripResponse = await fetch(`https://aimcabbooking.com/admin/Start_Trip_Message.php`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          });
+
         }
 
         console.log('Garage Out request successful');
@@ -214,21 +237,26 @@ function StartTrip({ route }) {
       </View>
 
       <View style={styles.otpContainer}>
-        <Text style={styles.otpLabel}>Enter OTP:</Text>
-        <View style={styles.otpInputContainer}>
-          {otp.map((digit, index) => (
-            <TextInput
-              key={index}
-              style={styles.otpInput}
-              keyboardType="numeric"
-              maxLength={1}
-              value={digit}
-              onChangeText={(text) => handleOtpInput(text, index)}
-              ref={(ref) => (otpInputRefs.current[index] = ref)} // Assign refs
-            />
-          ))}
-        </View>
-      </View>
+  <Text style={styles.otpLabel}>Enter OTP:</Text>
+  <View style={styles.otpInputContainer}>
+    {otp.map((digit, index) => (
+      <TextInput
+        key={index}
+        style={styles.otpInput}
+        keyboardType="numeric"
+        maxLength={1}
+        value={digit}
+        onChangeText={(text) => handleOtpInput(text, index)}
+        onKeyPress={({ nativeEvent }) => {
+          if (nativeEvent.key === 'Backspace') {
+            handleBackspace(digit, index);
+          }
+        }}
+        ref={(ref) => (otpInputRefs.current[index] = ref)} // Assign refs
+      />
+    ))}
+  </View>
+</View>
 
       {/* Verification Message */}
       <Text style={styles.verificationMessage}>{verificationMessage}</Text>

@@ -17,6 +17,8 @@ function StartTrip({ route }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [driverSelfieUri, setDriverSelfieUri] = useState(null);
+  const distance = trip.user_pickup-trip.user_drop;
+  console.log(distance);
 
 
   useEffect(() => {
@@ -28,17 +30,25 @@ function StartTrip({ route }) {
 
 
   // Function to handle OTP input for each digit
+   // Function to handle OTP input for each digit
   const handleOtpInput = (text, index) => {
-    // Check if the entered text is a digit
+    // Check if the entered text is a digit or empty
     if (/^\d+$/.test(text) || text === '') {
       const newOtp = [...otp];
       newOtp[index] = text;
       setOtp(newOtp);
-
+  
       // Move focus to the next input if not the last input
-      if (index < otp.length - 1) {
+      if (index < otp.length - 1 && (text !== '' || newOtp[index + 1] !== '')) {
         otpInputRefs.current[index + 1].focus();
       }
+    }
+  };
+  
+  const handleBackspace = (text, index) => {
+    if (text === '' && index > 0) {
+      // Move focus to the previous input when removing data
+      otpInputRefs.current[index - 1].focus();
     }
   };
 
@@ -91,6 +101,28 @@ function StartTrip({ route }) {
 
         if (kilometerResponse.ok) {
           console.log('Kilometers sent successfully to the other API');
+
+           const kilometerData = {
+            km:kilometers-trip.odometer_start,
+          email: trip.email, // Assuming 'kilometers' is the state variable for the entered kilometers
+          bookid: trip.bookid,
+          id:trip.id
+        };
+        console.log("first",kilometers-trip.odometer_start);
+                console.log("second",trip.odometer_start-kilometers);
+
+        console.log(trip.odometer_start);
+        console.log(kilometers);
+
+        const kilometerResponse = await fetch('https://aimcabbooking.com/admin/end-trip-confirm.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(kilometerData),
+        });
+
+
         } else {
           console.error('Failed to send kilometers to the other API');
         }
@@ -202,23 +234,27 @@ function StartTrip({ route }) {
         />
       </View>
 
-      <View style={styles.otpContainer}>
-        <Text style={styles.otpLabel}>Enter OTP:</Text>
-        <View style={styles.otpInputContainer}>
-          {otp.map((digit, index) => (
-            <TextInput
-              key={index}
-              style={styles.otpInput}
-              keyboardType="numeric"
-              maxLength={1}
-              value={digit}
-              onChangeText={(text) => handleOtpInput(text, index)}
-              ref={(ref) => (otpInputRefs.current[index] = ref)} // Assign refs
-            />
-          ))}
-        </View>
-      </View>
-
+        <View style={styles.otpContainer}>
+  <Text style={styles.otpLabel}>Enter OTP:</Text>
+  <View style={styles.otpInputContainer}>
+    {otp.map((digit, index) => (
+      <TextInput
+        key={index}
+        style={styles.otpInput}
+        keyboardType="numeric"
+        maxLength={1}
+        value={digit}
+        onChangeText={(text) => handleOtpInput(text, index)}
+        onKeyPress={({ nativeEvent }) => {
+          if (nativeEvent.key === 'Backspace') {
+            handleBackspace(digit, index);
+          }
+        }}
+        ref={(ref) => (otpInputRefs.current[index] = ref)} // Assign refs
+      />
+    ))}
+  </View>
+</View>
       {/* Verification Message */}
       <Text style={styles.verificationMessage}>{verificationMessage}</Text>
      

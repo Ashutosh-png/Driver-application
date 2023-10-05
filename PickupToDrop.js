@@ -15,6 +15,10 @@ import Constants from "expo-constants";
 import * as Location from 'expo-location';
 import MapViewDirections from "react-native-maps-directions";
 import { useNavigation } from "@react-navigation/native";
+import { Linking } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+
 
 
 const { width, height } = Dimensions.get("window");
@@ -94,6 +98,22 @@ const MapPage = ({ route }) => {
     }
   };
 
+    const openGoogleMaps = () => {
+  if (trip.user_drop && trip.user_pickup) {
+  //  const start = `${origin.latitude},${origin.longitude}`;
+   // const end = `${trip.userdrop.latitude},${trip.userdrop.longitude}`;
+    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${trip.user_pickup}&destination=${trip.user_drop}`;
+    
+    console.log('Google Maps URL:', googleMapsUrl); // Add this line to log the URL
+
+    Linking.openURL(googleMapsUrl)
+      .catch((error) => {
+        console.error('Failed to open Google Maps. Error:', error);
+      });
+  }
+};
+
+
   const onPlaceSelected = (details, flag) => {
     const set = flag === "origin" ? setOrigin : setDestination;
     const position = {
@@ -108,6 +128,9 @@ const MapPage = ({ route }) => {
   const data = {
     driverid: trip.driverid,
   };
+
+ 
+
 
   const data1 = {
     phone: trip.phone,
@@ -237,6 +260,39 @@ const MapPage = ({ route }) => {
           </View>
         ) : null}
       </View>
+        <TouchableOpacity style={styles.navigateButton} onPress={openGoogleMaps}>
+        <Text style={styles.navigate}>Navigate</Text>
+        <View style={styles.icon}>
+        <Icon name="location-arrow" size={30} color="#ffffff" />
+        
+        </View>
+      </TouchableOpacity>
+      <View style={styles.searchContainer}>
+        {/* <InputAutocomplete
+          label="Origin"
+          onPlaceSelected={(details) => {
+            onPlaceSelected(details, "origin");
+          }}
+        />
+        <InputAutocomplete
+          label="Destination"
+          onPlaceSelected={(details) => {
+            onPlaceSelected(details, "destination");
+          }}
+        /> */}
+        {/* Removed the Trace route button */}
+        {distance && duration ? (
+          <View>
+            <Text>Distance: {distance.toFixed(2)}</Text>
+            <Text>Duration: {Math.ceil(duration)} min</Text>
+            <Text>PickupLocation:{trip.user_pickup} </Text>
+            <Text>DropLocation:{trip.user_drop} </Text>
+          </View>
+        ) : null}
+      </View>
+      {/* <TouchableOpacity style={styles.openMapsButton} onPress={openGoogleMaps}>
+    <Text style={styles.openMapsButtonText}>Navigate</Text>
+  </TouchableOpacity> */}
        <TouchableOpacity style={styles.startTripButton}  onPress={handleStartTrip}>
         <Text style={styles.startTripButtonText}>End Trip</Text>
       </TouchableOpacity>
@@ -266,8 +322,45 @@ const styles = StyleSheet.create({
     elevation: 4,
     padding: 8,
     borderRadius: 8,
-    top: Constants.statusBarHeight,
+   top:'78%',
   },
+   navigateButton: {
+    backgroundColor: "blue",
+      top:'-25%',
+      borderRadius: 50,
+      width:250,
+      height:60,
+      alignItems:"stretch",
+      marginRight:'-20%',
+  },
+  navigate: {
+    textAlign: "center",
+    color: "white",
+    fontSize: 18,
+    marginTop:20,
+  
+
+
+  },
+  icon:{
+    top:-30,
+    marginLeft:50,
+  },
+   openMapsButton: {
+  backgroundColor: 'blue',
+  paddingVertical: 16,
+  width: '100%',
+  alignItems: 'center',
+  position: 'absolute',
+  bottom: 20,
+  marginBottom:'10%'
+},
+openMapsButtonText: {
+  color: 'white',
+  fontSize: 18,
+  fontWeight: 'bold',
+},
+
   input: {
     borderColor: "#888",
     borderWidth: 1,
