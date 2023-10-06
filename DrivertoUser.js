@@ -164,7 +164,7 @@ const MapPage = ({ route }) => {
     // Update location every one minute
     const locationInterval = setInterval(() => {
       updateLocation();
-    }, 2000); // 60 seconds
+    }, 700); // 60 seconds
 
     // Clean up the interval when the component unmounts
     return () => {
@@ -172,7 +172,7 @@ const MapPage = ({ route }) => {
     };
   }, [trip, origin, destination]);
 
-  return (
+ return (
     <View style={styles.container}>
       {origin && destination && (
         <MapView
@@ -214,9 +214,9 @@ const MapPage = ({ route }) => {
         /> */}
         {/* Removed the Trace route button */}
         {distance && duration ? (
-          <View>
-            <Text>Distance: {distance.toFixed(2)}</Text>
-            <Text>Duration: {Math.ceil(duration)} min</Text>
+          <View >
+            <Text >Distance: {distance.toFixed(2)}</Text>
+            <Text >Duration: {Math.ceil(duration)} min</Text>
           </View>
         ) : null}
        </View>
@@ -247,10 +247,11 @@ const MapPage = ({ route }) => {
       
         {distance && duration ? (
           <View>
-            <Text>Distance: {distance.toFixed(2)}</Text>
-            <Text>Duration: {Math.ceil(duration)} min</Text>
-            <Text>PickupLocation:{trip.user_pickup}</Text>
-            <Text>DropLocation:{trip.user_drop}</Text>
+           <Text style={styles.text}>Distance: {distance.toFixed(2)}</Text>
+<Text style={styles.text}>Duration: {Math.ceil(duration)} min</Text>
+<Text style={styles.text}>PickupLocation:{trip.user_pickup}</Text>
+<Text style={styles.text}>DropLocation:{trip.user_drop}</Text>
+
           </View>
         ) : null}
       </View>
@@ -275,7 +276,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     position: "absolute",
     width: "90%",
-    backgroundColor: "white",
+    backgroundColor: "black",
     shadowColor: "black",
     shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.5,
@@ -283,7 +284,11 @@ const styles = StyleSheet.create({
     elevation: 4,
     padding: 8,
     borderRadius: 8,
-   top:'78%',
+   top:'5%',
+   color:"",
+  },
+  text:{
+ color:"#fffff",
   },
   input: {
     borderColor: "#888",
@@ -296,14 +301,18 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
     navigateButton: {
-    backgroundColor: "blue",
-      top:'-25%',
+    backgroundColor: "#1ea5eb",
+      top:'-12%',
       borderRadius: 50,
-      width:250,
+      width:150,
       height:60,
       alignItems:"stretch",
-      marginRight:'-20%',
+      marginRight:'-55%',
   },
+  text: {
+    color: "white", // Add this line to set the text color to white
+  },
+  
   navigate: {
     textAlign: "center",
     color: "white",
@@ -315,7 +324,7 @@ const styles = StyleSheet.create({
   },
   icon:{
     top:-30,
-    marginLeft:50,
+    marginLeft:10,
   },
   openMapsButton: {
   backgroundColor: 'blue',

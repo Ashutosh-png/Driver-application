@@ -207,7 +207,7 @@ const MapPage = ({ route }) => {
     // Update location every one minute
     const locationInterval = setInterval(() => {
       updateLocation();
-    }, 2000); // 60 seconds
+    }, 700); // 60 seconds
 
     // Clean up the interval when the component unmounts
     return () => {
