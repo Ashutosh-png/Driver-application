@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "AimcabD",
-    "slug": "test_app",
+    "slug": "test_driver",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -30,7 +30,7 @@
           "apiKey": "AIzaSyDjIsbaqcr8co379nw6IKnPmAA0Hf5IyeI"
         }
       },
-      "package": "com.ashutosh1239.test_app"
+      "package": "com.ashutosh1239.test_driver"
     },
     "web": {
       "favicon": "./assets/favicon.png"

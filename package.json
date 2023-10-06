@@ -1,5 +1,5 @@
 {
-  "name": "test_app",
+  "name": "test_driver",
   "version": "1.0.0",
   "scripts": {
     "start": "expo start --dev-client",

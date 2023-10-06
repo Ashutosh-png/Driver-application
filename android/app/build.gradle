@@ -114,10 +114,10 @@ android {
     compileSdkVersion 33
     
 
-    namespace "com.ashutosh1239.test_app"
+    namespace "com.ashutosh1239.test_driver"
     defaultConfig {
         manifestPlaceholders = [appAuthRedirectScheme: 'dev.expo.app']
-        applicationId 'com.ashutosh1239.test_app'
+        applicationId 'com.ashutosh1239.test_driver'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion 33
         versionCode 1

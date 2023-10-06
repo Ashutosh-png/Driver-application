@@ -1,4 +1,4 @@
-package com.ashutosh1239.test_app;
+package com.ashutosh1239.test_driver;
 
 import android.app.Application;
 import android.content.res.Configuration;
