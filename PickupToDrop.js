@@ -165,8 +165,11 @@ const MapPage = ({ route }) => {
       //   throw new Error('Network response was not ok');
       // }
 
-      console.log(trip.bookid, "bookid in end trip");
-      navigation.navigate('EndTrip', { trip, odostart }); // Navigate to the 'EndTrip' screen
+     // console.log(trip.bookid, "bookid in end trip");
+     // console.log("distances/////////",distance);
+     
+      navigation.navigate('EndTrip', { trip, odostart });
+       
     })
     .catch((error) => {
       console.error('Error:', error);
@@ -204,7 +207,7 @@ const MapPage = ({ route }) => {
     // Update location every one minute
     const locationInterval = setInterval(() => {
       updateLocation();
-    }, 500); // 60 seconds
+    }, 2000); // 60 seconds
 
     // Clean up the interval when the component unmounts
     return () => {

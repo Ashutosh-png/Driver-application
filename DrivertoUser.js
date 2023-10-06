@@ -66,6 +66,7 @@ const MapPage = ({ route }) => {
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState(0);
   const mapRef = useRef(null);
+  console.log("distance",distance);
 
   const moveTo = async (position) => {
     const camera = await mapRef.current?.getCamera();
@@ -109,14 +110,19 @@ const MapPage = ({ route }) => {
   };
 
   const handleStartTrip = () => {
-    navigation.navigate('startTrip', { trip }); // Navigate to the 'MapNavigate' screen
+          console.log("distances/////////",distance);
+
+     if(distance<0.6){
+    navigation.navigate('startTrip', { trip });}else{
+      console.log("the distance is not in 500 meter");
+    } // Navigate to the 'MapNavigate' screen
   };
 
  const openGoogleMaps = () => {
   if (trip.user_drop && trip.user_pickup) {
-  //  const start = `${origin.latitude},${origin.longitude}`;
+    const start = `${origin.latitude},${origin.longitude}`;
    // const end = `${trip.userdrop.latitude},${trip.userdrop.longitude}`;
-    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=${trip.user_pickup}`;
+    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${start}&destination=${trip.user_pickup}`;
     
     console.log('Google Maps URL:', googleMapsUrl); // Add this line to log the URL
 
@@ -158,7 +164,7 @@ const MapPage = ({ route }) => {
     // Update location every one minute
     const locationInterval = setInterval(() => {
       updateLocation();
-    }, 10000); // 60 seconds
+    }, 2000); // 60 seconds
 
     // Clean up the interval when the component unmounts
     return () => {

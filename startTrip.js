@@ -137,10 +137,12 @@ function StartTrip({ route }) {
             userdrop:trip.user_drop,
             userpickup:trip.user_pickup,
             usertriptype:trip.user_trip_type,
+            start_odometer:kilometers,
             amount:trip.amount
           };
   
           console.log(trip.bookid);
+          
   
           const startTripResponse = await fetch(`https://aimcabbooking.com/admin/Start_Trip_Message.php`, {
             method: 'POST',
@@ -335,22 +337,27 @@ const styles = StyleSheet.create({
   inputContainer1: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft:'15%',
     marginBottom:160,
+    width:'70%',
   },
   inputLabel: {
     
     fontSize: 18,
     fontWeight: 'bold',
     marginLeft:120,
+    
   },
   inputField: {
     flex: 2,
     height: 40,
+
     borderColor: 'black',
     borderWidth: 1,
     paddingLeft: 10,
     fontSize: 16,
     borderRadius: 10,
+    
   },
   otpContainer: {
     flexDirection: 'row',
@@ -373,7 +380,7 @@ const styles = StyleSheet.create({
   otpInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft:-170,
+    marginLeft:"-45%",
     
   },
   otpInput: {
@@ -416,12 +423,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   driverSelfieImage: {
-    width: 200,
+    width: "80%",
     height: 200,
     borderRadius: 100, // Make it round (adjust as needed)
   },
   camera: {
-    width: 250,
+    width: "70%",
     height: 200,
   },
   captureButton: {

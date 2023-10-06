@@ -9,6 +9,8 @@ const TripCard = ({ trip }) => {
   const { user_pickup, user_drop, time, date, status, car,username,driverid,triptype,distance,fare,cabid,contactno,bookingid } = trip;
   const timeOnly = time ; // Check if 'time' is defined
   const navigation = useNavigation();
+  console.log("odometer",trip.odometer_start);
+  const odostart = trip.odometer_start;
 
 
   return (
@@ -89,7 +91,8 @@ const TripCard = ({ trip }) => {
     onPress={() => {
       // Handle the "Start Trip" button click event here
       // You can add the logic to start the trip
-          navigation.navigate('TripDetails1', { trip });
+      console.log(odostart);
+          navigation.navigate('PickupToDrop', { trip, odostart });
 
     }}
     style={{
@@ -110,7 +113,6 @@ const OngoingTrip = () => {
   const [trips, setTrips] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [driverId, setDriverId] = useState(""); // Use driverId instead of userid
-
   // Function to fetch trips data using 'driverId'
   const fetchTripsData = (driverId) => {
     fetch(`http://www.aimcabbooking.com/admin/Trip_Started.php?driverid=${driverId}`) // Use the correct API endpoint

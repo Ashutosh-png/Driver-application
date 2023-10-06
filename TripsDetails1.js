@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 function TripDetails1({ route }) {
   const { trip } = route.params;
     const navigation = useNavigation();
+    //console.log("odostart",odostart);
 
 
   const handleGarageOut = () => {
@@ -69,7 +70,7 @@ function TripDetails1({ route }) {
         </View>
         <View style={styles.detailRow}>
           <Text style={styles.label}>Booking Type:</Text>
-          <Text style={styles.value}>{trip.bookingtype}</Text>
+          <Text style={styles.value}>{trip.user_trip_type}</Text>
         </View>
         <View style={styles.detailRow}>
           <Text style={styles.label}>Distance:</Text>
@@ -95,6 +96,7 @@ function TripDetails1({ route }) {
           <Text style={styles.label}>Date:</Text>
           <Text style={styles.value}>{trip.date}</Text>
         </View>
+        
         <View style={styles.detailRow}>
           <Text style={styles.label}>Email:</Text>
           <Text style={styles.value}>{trip.email}</Text>
@@ -107,6 +109,7 @@ function TripDetails1({ route }) {
           <Text style={styles.label}>Phone:</Text>
           <Text style={styles.value}>{trip.phone}</Text>
         </View>
+        
         
         {/* Add more detail rows for other trip details */}
       </View>

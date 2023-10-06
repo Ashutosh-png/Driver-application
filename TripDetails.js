@@ -62,14 +62,15 @@ function TripDetails({ route }) {
           <Text style={styles.label}>Booking ID:</Text>
           <Text style={styles.value}>{trip.bookid}</Text>
         </View>
+         <View style={styles.detailRow}>
+          <Text style={styles.label}>Name:</Text>
+          <Text style={styles.value}>{trip.name}</Text>
+        </View>
         <View style={styles.detailRow}>
           <Text style={styles.label}>Booking Type:</Text>
-          <Text style={styles.value}>{trip.bookingtype}</Text>
+          <Text style={styles.value}>{trip.user_trip_type}</Text>
         </View>
-        <View style={styles.detailRow}>
-          <Text style={styles.label}>Cab ID:</Text>
-          <Text style={styles.value}>{trip.cabid}</Text>
-        </View>
+        
         <View style={styles.detailRow}>
           <Text style={styles.label}>Car Type:</Text>
           <Text style={styles.value}>{trip.car}</Text>
@@ -86,14 +87,15 @@ function TripDetails({ route }) {
           <Text style={styles.label}>Email:</Text>
           <Text style={styles.value}>{trip.email}</Text>
         </View>
-        <View style={styles.detailRow}>
-          <Text style={styles.label}>Garage Out:</Text>
-          <Text style={styles.value}>{trip.garage_out}</Text>
-        </View>
-        <View style={styles.detailRow}>
+         <View style={styles.detailRow}>
           <Text style={styles.label}>Phone:</Text>
           <Text style={styles.value}>{trip.phone}</Text>
         </View>
+        <View style={styles.detailRow}>
+          <Text style={styles.label}>Amount:</Text>
+          <Text style={styles.value}>{trip.amount}</Text>
+        </View>
+       
         {/* Add more detail rows for other trip details */}
       </View>
 
