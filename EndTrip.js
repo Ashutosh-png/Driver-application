@@ -4,6 +4,7 @@ import { Camera } from 'expo-camera';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import * as MediaLibrary from 'expo-media-library';
+import { Alert } from 'react-native';
 
 
 function StartTrip({ route }) {
@@ -145,7 +146,12 @@ function StartTrip({ route }) {
        
 
         console.log('Garage Out request successful');
-        navigation.navigate('Home');
+       if (parseFloat(kilometers) > parseFloat(odostart)) {
+          navigation.navigate('EndThankyou', { trip, odostart, kilometers });
+        } else {
+          Alert.alert("Please put a value greater than odometer start", odostart);
+        }
+      //  navigation.navigate('EndThankyou', { trip, odostart,kilometers });
       } catch (error) {
         console.error('Error saving user data or starting trip:', error);
       }
@@ -169,48 +175,48 @@ function StartTrip({ route }) {
     setVerificationMessage('');
   }, [otp]);
 
-  const handleDriverSelfieCapture = async () => {
-    if (cameraRef) {
-      try {
-        const photo = await cameraRef.takePictureAsync();
+  // const handleDriverSelfieCapture = async () => {
+  //   if (cameraRef) {
+  //     try {
+  //       const photo = await cameraRef.takePictureAsync();
   
-        // Generate a unique file name based on the current timestamp
-        const timestamp = Date.now();
-        const fileName = `driver_selfie_${timestamp}.jpg`;
+  //       // Generate a unique file name based on the current timestamp
+  //       const timestamp = Date.now();
+  //       const fileName = `driver_selfie_${timestamp}.jpg`;
 
         
   
         // Create a FormData object to send the image to the API
-        const formData = new FormData();
-        formData.append('selfie', {
-          uri: photo.uri,
-          type: 'image/jpeg',
-          name: fileName, // Use the generated file name
-        });
+        // const formData = new FormData();
+        // formData.append('selfie', {
+        //   uri: photo.uri,
+        //   type: 'image/jpeg',
+        //   name: fileName, // Use the generated file name
+        // });
   
-        // Make a POST request to your PHP API to save the image
-        const response = await fetch('https://aimcabbooking.com/api/camera.php', {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            // Add any other headers you may need (e.g., authentication headers)
-          },
-        });
+        // // Make a POST request to your PHP API to save the image
+        // const response = await fetch('https://aimcabbooking.com/api/camera.php', {
+        //   method: 'POST',
+        //   body: formData,
+        //   headers: {
+        //     'Content-Type': 'multipart/form-data',
+        //     // Add any other headers you may need (e.g., authentication headers)
+        //   },
+        // });
   
-        if (response.ok) {
-          const responseData = await response.json();
-          const savedImageUri = responseData.imageUri; // Assuming your API returns the saved image URL
-          setDriverSelfieUri(savedImageUri);
-        } else {
-          Alert.alert('Error', 'Failed to save the selfie.');
-        }
-      } catch (error) {
-        console.error('Error capturing selfie:', error);
-        Alert.alert('Error', 'An error occurred while capturing the selfie.');
-      }
-    }
-  };
+  //       if (response.ok) {
+  //         const responseData = await response.json();
+  //         const savedImageUri = responseData.imageUri; // Assuming your API returns the saved image URL
+  //         setDriverSelfieUri(savedImageUri);
+  //       } else {
+  //         Alert.alert('Error', 'Failed to save the selfie.');
+  //       }
+  //     } catch (error) {
+  //       console.error('Error capturing selfie:', error);
+  //       Alert.alert('Error', 'An error occurred while capturing the selfie.');
+  //     }
+  //   }
+  // };
   
 
   return (
@@ -224,13 +230,13 @@ function StartTrip({ route }) {
       </View>
 
       {/* Enter Kilometers Text */}
-      <Text style={styles.inputLabel}>Enter Kilometers:</Text>
+      {/* <Text style={styles.inputLabel}>Enter Kilometers:</Text> */}
 
       {/* Kilometers Input Field */}
       <View style={styles.inputContainer1}>
         <TextInput
           style={styles.inputField}
-          placeholder="0.0"
+          placeholder="Enter Kilometers:"
           keyboardType="numeric"
           value={kilometers}
           onChangeText={(text) => setKilometers(text)}
@@ -303,7 +309,9 @@ const styles = StyleSheet.create({
   inputContainer1: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft:'15%',
     marginBottom:160,
+    width:'70%',
   },
   inputLabel: {
     
@@ -341,7 +349,7 @@ const styles = StyleSheet.create({
   otpInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft:-170,
+    marginLeft:"-45%",
     
   },
   otpInput: {

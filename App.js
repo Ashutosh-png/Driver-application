@@ -26,6 +26,9 @@ import UpcomingTrip from './UpcomingTrip';
 import OngoingTrip from './OngoingTrip';
 import CompletTrip from './CompletTrip';
 import TripDetails1 from './TripsDetails1';
+import EndThankyou from './EndThankyou';
+import EndPage from './EndPage';
+
 
 
 
@@ -61,6 +64,10 @@ export default function App() {
          <Stack.Screen name="OngoingTrip" component={OngoingTrip} />
          <Stack.Screen name="UpcomingTrip" component={UpcomingTrip} />
                   <Stack.Screen name="TripDetails1" component={TripDetails1} />
+                                    <Stack.Screen name="EndThankyou" component={EndThankyou} />
+                                   <Stack.Screen name="EndPage" component={EndPage} />
+
+
 
 
 

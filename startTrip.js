@@ -179,48 +179,48 @@ function StartTrip({ route }) {
     setVerificationMessage('');
   }, [otp]);
 
-  const handleDriverSelfieCapture = async () => {
-    if (cameraRef) {
-      try {
-        const photo = await cameraRef.takePictureAsync();
+  // const handleDriverSelfieCapture = async () => {
+  //   if (cameraRef) {
+  //     try {
+  //       const photo = await cameraRef.takePictureAsync();
   
         // Generate a unique file name based on the current timestamp
-        const timestamp = Date.now();
-        const fileName = `driver_selfie_${timestamp}.jpg`;
+       // const timestamp = Date.now();
+      //  const fileName = `driver_selfie_${timestamp}.jpg`;
 
         
   
         // Create a FormData object to send the image to the API
-        const formData = new FormData();
-        formData.append('selfie', {
-          uri: photo.uri,
-          type: 'image/jpeg',
-          name: fileName, // Use the generated file name
-        });
+      //  const formData = new FormData();
+      //  formData.append('selfie', {
+      //    uri: photo.uri,
+       //   type: 'image/jpeg',
+       //   name: fileName, // Use the generated file name
+      //  });
   
         // Make a POST request to your PHP API to save the image
-        const response = await fetch('https://aimcabbooking.com/api/camera.php', {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'Content-Type': 'multipart/form-data',
+      //  const response = await fetch('https://aimcabbooking.com/api/camera.php', {
+       //   method: 'POST',
+       //   body: formData,
+      //    headers: {
+        //    'Content-Type': 'multipart/form-data',
             // Add any other headers you may need (e.g., authentication headers)
-          },
-        });
+      //    },
+      //  });
   
-        if (response.ok) {
-          const responseData = await response.json();
-          const savedImageUri = responseData.imageUri; // Assuming your API returns the saved image URL
-          setDriverSelfieUri(savedImageUri);
-        } else {
-          Alert.alert('Error', 'Failed to save the selfie.');
-        }
-      } catch (error) {
-        console.error('Error capturing selfie:', error);
-        Alert.alert('Error', 'An error occurred while capturing the selfie.');
-      }
-    }
-  };
+        // if (response.ok) {
+        //   const responseData = await response.json();
+        //   const savedImageUri = responseData.imageUri; // Assuming your API returns the saved image URL
+        //   setDriverSelfieUri(savedImageUri);
+        // } else {
+        //   Alert.alert('Error', 'Failed to save the selfie.');
+        // }
+  //     } catch (error) {
+  //       console.error('Error capturing selfie:', error);
+  //       Alert.alert('Error', 'An error occurred while capturing the selfie.');
+  //     }
+    
+  
   
 
   return (
@@ -234,13 +234,13 @@ function StartTrip({ route }) {
       </View>
 
       {/* Enter Kilometers Text */}
-      <Text style={styles.inputLabel}>Enter Kilometers:</Text>
+      {/* <Text style={styles.inputLabel}>Enter Kilometers:</Text> */}
 
       {/* Kilometers Input Field */}
       <View style={styles.inputContainer1}>
         <TextInput
           style={styles.inputField}
-          placeholder="0.0"
+          placeholder="Enter Kilometers:"
           keyboardType="numeric"
           value={kilometers}
           onChangeText={(text) => setKilometers(text)}
@@ -269,9 +269,8 @@ function StartTrip({ route }) {
   </View>
 </View>
 
-      {/* Verification Message */}
       <Text style={styles.verificationMessage}>{verificationMessage}</Text>
-      <View style={styles.driverSelfieContainer}>
+      {/* <View style={styles.driverSelfieContainer}>
   <Text style={styles.driverSelfieLabel}>Driver Selfie:</Text>
   {driverSelfieUri ? (
     <Image source={{ uri: driverSelfieUri }} style={styles.driverSelfieImage} />
@@ -290,11 +289,8 @@ function StartTrip({ route }) {
     </Camera>
   )}
 
-  {/* Upload Selfie Button */}
-  {/* <TouchableOpacity style={styles.uploadButton} onPress={handleDriverSelfieCapture}>
-    <Text style={styles.uploadButtonText}>Upload Selfie</Text>
-  </TouchableOpacity> */}
-</View>
+ 
+</View> */}
 
 
 

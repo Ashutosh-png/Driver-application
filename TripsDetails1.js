@@ -1,12 +1,30 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity,ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 
 function TripDetails1({ route }) {
-  const { trip } = route.params;
-    const navigation = useNavigation();
-    //console.log("odostart",odostart);
+  const { trip, odostart, kilometers } = route.params;
+console.log("trip", trip);
+const drop = trip.user_drop;
+console.log("drop", drop);
+const navigation = useNavigation();
+const km = trip.odometer_end -trip.odometer_start;
+const extrakm =km - trip.distance;
+const fare = trip.baseAmount / trip.distance;
+const extraprice = fare * extrakm;
+
+// Calculate tripAmount before using it in totalamount calculation
+const tripAmount = parseInt(trip.amount, 10); // Parse the string as an integer with base 10
+const totalamount = extraprice + tripAmount;
+console.log(fare);
+console.log( km);
+
+
+
+   
+console.log(extrakm);
+
 
 
   const handleGarageOut = () => {
@@ -43,6 +61,8 @@ function TripDetails1({ route }) {
   };
 
    return (
+    <ScrollView style={styles.container}>
+   
     <View>
       {/* User Pickup Card */}
       
@@ -62,7 +82,7 @@ function TripDetails1({ route }) {
         <Text style={styles.cardTitle}>Trip Details:</Text>
         <View style={styles.detailRow}>
           <Text style={styles.label}>User Name:</Text>
-          <Text style={styles.value}>{trip.username}</Text>
+          <Text style={styles.value}>{trip.name}</Text>
         </View>
         <View style={styles.detailRow}>
           <Text style={styles.label}>Booking ID:</Text>
@@ -78,7 +98,7 @@ function TripDetails1({ route }) {
         </View>
         <View style={styles.detailRow}>
           <Text style={styles.label}>Fare:</Text>
-          <Text style={styles.value}>{trip.fare}</Text>
+          <Text style={styles.value}>{fare}</Text>
         </View>
         <View style={styles.detailRow}>
           <Text style={styles.label}>Cab ID:</Text>
@@ -96,7 +116,6 @@ function TripDetails1({ route }) {
           <Text style={styles.label}>Date:</Text>
           <Text style={styles.value}>{trip.date}</Text>
         </View>
-        
         <View style={styles.detailRow}>
           <Text style={styles.label}>Email:</Text>
           <Text style={styles.value}>{trip.email}</Text>
@@ -105,21 +124,57 @@ function TripDetails1({ route }) {
           <Text style={styles.label}>Garage Out:</Text>
           <Text style={styles.value}>{trip.garage_out}</Text>
         </View>
+       
         <View style={styles.detailRow}>
           <Text style={styles.label}>Phone:</Text>
           <Text style={styles.value}>{trip.phone}</Text>
         </View>
+        <View style={styles.detailRow}>
+          <Text style={styles.label}>Odometer Start:</Text>
+          <Text style={styles.value}>{trip.odometer_start}</Text>
+        </View>
+        <View style={styles.detailRow}>
+          <Text style={styles.label}>Odometer End:</Text>
+          <Text style={styles.value}>{trip.odometer_end}</Text>
+        </View>
+        <View style={styles.detailRow}> 
+          <Text style={styles.label}>Base Amount:</Text>
+          <Text style={styles.value}>{trip.baseAmount}</Text>
+        </View>
+        <View style={styles.detailRow}>
+          <Text style={styles.label}>Amount:</Text>
+          <Text style={styles.value}>{trip.amount}</Text>
+        </View>
+       
+        <View style={styles.detailRow}>
+          <Text style={styles.label}>Extra Kilometers:</Text>
+          <Text style={styles.value}>{extrakm}</Text>
+        </View>
+        <View style={styles.detailRow}>
+          <Text style={styles.label}>Extra Amount:</Text>
+          <Text style={styles.value}>{extraprice}</Text>
+        </View>
+        <View style={styles.detailRow}>
+          <Text style={styles.label}>Total Amount:</Text>
+          <Text style={styles.value}>{totalamount}</Text>
+        </View>
         
+
         
         {/* Add more detail rows for other trip details */}
       </View>
 
+      
+
      
       
     </View>
+    </ScrollView>
   );
 }
 
+
+  
 const styles = StyleSheet.create({
   card: {
     backgroundColor: 'white',
@@ -128,6 +183,12 @@ const styles = StyleSheet.create({
     margin: 2,
     elevation: 3,
     marginTop: 16,
+  },
+   container: {
+    flex: 1,
+    backgroundColor: '#F8F8F8',
+    padding: 20,
+    
   },
   cardTitle: {
     fontSize: 20,

@@ -16,8 +16,8 @@ import Profile from './Profile';
   const HomePage = ({ navigation }) => {
     
       const [userLocation, setUserLocation] = useState({
-        latitude: 37.78825,
-        longitude: -122.4324,
+        latitude: 18.5204,
+        longitude: 73.8567,
     });
     const [isOnline, setIsOnline] = useState(true);
 
@@ -65,7 +65,7 @@ import Profile from './Profile';
         <Text style={[styles.buttonText, { opacity: onlineTextOpacity }]}>Online</Text>
         <Text style={[styles.buttonText, { opacity: offlineTextOpacity }]}>Offline</Text>
       </TouchableOpacity>
-       <TouchableOpacity
+       {/* <TouchableOpacity
           style={styles.mapNavigateButton}
           onPress={handleMapNavigate}
         >
@@ -77,7 +77,7 @@ import Profile from './Profile';
           onPress={handleCurrent}
         >
           <Text style={styles.mapNavigateButtonText}>Go to current</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
     </View>
     <View style={styles.mapcontainer}>
   {userLocation.latitude && userLocation.longitude ? (
@@ -86,8 +86,8 @@ import Profile from './Profile';
           initialRegion={{
             latitude: userLocation.latitude,
             longitude: userLocation.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+            latitudeDelta: 18.5204,
+            longitudeDelta: 73.8567,
           }}
         >
           <Marker coordinate={userLocation} title="Your Location" />

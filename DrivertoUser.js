@@ -65,9 +65,9 @@ const MapPage = ({ route }) => {
   const [showDirections, setShowDirections] = useState(false);
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [shouldUpdate, setShouldUpdate] = useState(true); 
   const mapRef = useRef(null);
-  console.log("distance",distance);
-
+console.log(distance);
   const moveTo = async (position) => {
     const camera = await mapRef.current?.getCamera();
     if (camera) {
@@ -110,19 +110,19 @@ const MapPage = ({ route }) => {
   };
 
   const handleStartTrip = () => {
-          console.log("distances/////////",distance);
-
-     if(distance<0.6){
-    navigation.navigate('startTrip', { trip });}else{
-      console.log("the distance is not in 500 meter");
-    } // Navigate to the 'MapNavigate' screen
+    console.log(distance);
+    if(distance<0.5){
+ setShouldUpdate(false);
+    navigation.navigate('startTrip', { trip }); // Navigate to the 'MapNavigate' screen
+    }
+   
   };
 
  const openGoogleMaps = () => {
   if (trip.user_drop && trip.user_pickup) {
-    const start = `${origin.latitude},${origin.longitude}`;
+  //  const start = `${origin.latitude},${origin.longitude}`;
    // const end = `${trip.userdrop.latitude},${trip.userdrop.longitude}`;
-    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${start}&destination=${trip.user_pickup}`;
+    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=${trip.user_pickup}`;
     
     console.log('Google Maps URL:', googleMapsUrl); // Add this line to log the URL
 
@@ -138,6 +138,10 @@ const MapPage = ({ route }) => {
   // Fetch the current location using expo-location
   useEffect(() => {
     const updateLocation = async () => {
+      if (!shouldUpdate) {
+        return; // Don't update if shouldUpdate is false
+      }
+
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         console.log("Please grant location permissions");
@@ -145,11 +149,12 @@ const MapPage = ({ route }) => {
       }
 
       let currentLocation = await Location.getCurrentPositionAsync({});
-     // console.log(currentLocation);
       setOrigin({
         latitude: currentLocation.coords.latitude,
         longitude: currentLocation.coords.longitude,
       });
+
+      console.log(currentLocation);
 
       // Check if both origin and destination are set
       if (origin && destination) {
@@ -164,15 +169,15 @@ const MapPage = ({ route }) => {
     // Update location every one minute
     const locationInterval = setInterval(() => {
       updateLocation();
-    }, 700); // 60 seconds
+    }, 500); // 60 seconds
 
     // Clean up the interval when the component unmounts
     return () => {
       clearInterval(locationInterval);
     };
-  }, [trip, origin, destination]);
+  }, [trip, origin, destination, shouldUpdate]); 
 
- return (
+  return (
     <View style={styles.container}>
       {origin && destination && (
         <MapView
@@ -214,9 +219,9 @@ const MapPage = ({ route }) => {
         /> */}
         {/* Removed the Trace route button */}
         {distance && duration ? (
-          <View >
-            <Text >Distance: {distance.toFixed(2)}</Text>
-            <Text >Duration: {Math.ceil(duration)} min</Text>
+          <View>
+            <Text>Distance: {distance.toFixed(2)}</Text>
+            <Text>Duration: {Math.ceil(duration)} min</Text>
           </View>
         ) : null}
        </View>
@@ -246,8 +251,8 @@ const MapPage = ({ route }) => {
         {/* Removed the Trace route button */}
       
         {distance && duration ? (
-          <View>
-           <Text style={styles.text}>Distance: {distance.toFixed(2)}</Text>
+         <View>
+             <Text style={styles.text}>Distance: {distance.toFixed(2)}</Text>
 <Text style={styles.text}>Duration: {Math.ceil(duration)} min</Text>
 <Text style={styles.text}>PickupLocation:{trip.user_pickup}</Text>
 <Text style={styles.text}>DropLocation:{trip.user_drop}</Text>
@@ -274,7 +279,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height,
   },
   searchContainer: {
-    position: "absolute",
+   position: "absolute",
     width: "90%",
     backgroundColor: "black",
     shadowColor: "black",
@@ -285,10 +290,7 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 8,
    top:'5%',
-   color:"",
-  },
-  text:{
- color:"#fffff",
+   color:"white",
   },
   input: {
     borderColor: "#888",
@@ -301,18 +303,14 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
     navigateButton: {
-    backgroundColor: "#1ea5eb",
-      top:'-12%',
+    backgroundColor: "blue",
+      top:'-25%',
       borderRadius: 50,
-      width:150,
+      width:250,
       height:60,
       alignItems:"stretch",
-      marginRight:'-55%',
+      marginRight:'-20%',
   },
-  text: {
-    color: "white", // Add this line to set the text color to white
-  },
-  
   navigate: {
     textAlign: "center",
     color: "white",
@@ -323,7 +321,7 @@ const styles = StyleSheet.create({
 
   },
   icon:{
-    top:-30,
+     top:-30,
     marginLeft:10,
   },
   openMapsButton: {
@@ -335,6 +333,18 @@ const styles = StyleSheet.create({
   bottom: 20,
   marginBottom:'10%'
 },
+text:{
+    color:"white",
+     },
+     navigateButton: {
+      backgroundColor: "#1ea5eb",
+        top:'-12%',
+        borderRadius: 50,
+        width:150,
+        height:60,
+        alignItems:"stretch",
+        marginRight:'-55%',
+    },
 openMapsButtonText: {
   color: 'white',
   fontSize: 18,

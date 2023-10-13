@@ -61,27 +61,25 @@ const TripCard = ({ trip }) => {
   <Text style={[styles.text, styles.details]}>
     Distance: {distance}
   </Text>
-  <Text style={[styles.text, styles.details]}>
-    Trip Type: {triptype}
+ <Text style={[styles.text, styles.details]}>
+    Cab Id: {cabid}
   </Text>
 </View>   
 
 <View style={styles.row}>
-  <Text style={[styles.text, styles.details]}>
+  {/* <Text style={[styles.text, styles.details]}>
     Fare: {fare}
-  </Text>
-  <Text style={[styles.text, styles.details]}>
-    Cab Id: {cabid}
-  </Text>
+  </Text> */}
+  
 </View>
 
 <View style={styles.row}>
-  <Text style={[styles.text, styles.details]}>
+  {/* <Text style={[styles.text, styles.details]}>
     Contact No: {contactno}
-  </Text>
-  <Text style={[styles.text, styles.details]}>
+  </Text> */}
+  {/* <Text style={[styles.text, styles.details]}>
     Booking Id: {bookingid}
-  </Text>
+  </Text> */}
 </View>
 
 
